@@ -6,19 +6,24 @@ const Home = () => {
   return (
     <Flex
       as='main'
-      h='100%'
-      w='100%'
+      backgroundColor='red'
+      // h='100%'
+      // w='100%'
       alignItems='center'
       justifyContent='center'
+      overflow='hidden'
+      h='100vh'
+      w='100vw'
     >
+      {/* <Box maxHeight='90%' maxWidth='100%'> */}
       <Box
         w={['100%', '95%', '80%', '75%', '65%']}
         h={['100%', '90%', '80%']}
         borderRadius='2xl'
         backgroundColor='black'
         rounded={['lg', '2xl', '3xl']}
-        overflow='hidden'
         boxShadow={['2xl', 'dark-lg']}
+        overflow='hidden'
       >
         <Flex
           h='100%'
@@ -26,10 +31,11 @@ const Home = () => {
           backgroundColor='white'
           fontSize={['sm', 'md', 'lg', 'xl']}
         >
-          <Sidebar flex='1' backgroundColor='red' />
-          <Chat flex='2' />
+          <Sidebar />
+          <Chat />
         </Flex>
       </Box>
+      {/* </Box> */}
     </Flex>
   );
 };
