@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -12,16 +12,142 @@ import {
   Heading,
   Text,
   Icon,
+  Spinner,
 } from '@chakra-ui/react';
 import { FcAddImage } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
+import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from 'firebase/storage';
+import { auth, db, storage } from '../firebase.config';
 import logo from '../assets/LogoWithName.svg';
+import { async } from '@firebase/util';
+
+const initialFormValues = {
+  displayName: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+  file: '',
+};
 
 const Form = ({ location }) => {
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [formValues, setFormValues] = useState(initialFormValues);
+  const { displayName, email, password, confirmPassword, file } = formValues;
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+
+    setFormValues((prev) => {
+      return { ...prev, [id]: value };
+    });
+
+    if (e.target.id === 'file') {
+      console.log(e.target.files[0].name);
+      setFormValues((prev) => {
+        return { ...prev, file: e.target.files[0] };
+      });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    if (!displayName || !email || !password || !confirmPassword) {
+      setError('All fields are required');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    try {
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      const user = res.user;
+
+      // for photo storage
+      const metadata = {
+        contentType: 'image/jpeg',
+      };
+      // Create a reference to 'mountains.jpg'
+      const storageRef = ref(storage, `${displayName}.jpg`);
+
+      // Create a reference to 'images/mountains.jpg'
+      const storageImagesRef = ref(storage, `images/${displayName}.jpg`);
+      const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused');
+              break;
+            case 'running':
+              console.log('Upload is running');
+              break;
+          }
+        },
+        (error) => {
+          // Handle unsuccessful uploads
+          setError('Photo upload failed');
+        },
+        () => {
+          // Handle successful uploads on complete
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            await updateProfile(auth.currentUser, {
+              displayName,
+              photoURL: downloadURL,
+            });
+
+            // for firestore database, copy of user's info
+            const formDataCopy = {
+              ...formValues,
+              uid: user.uid,
+              displayName,
+              photoURL: downloadURL,
+            };
+            delete formDataCopy.password;
+            delete formDataCopy.confirmPassword;
+            formDataCopy.timestamp = serverTimestamp();
+
+            await setDoc(doc(db, 'users', user.uid), formDataCopy);
+            console.log(downloadURL);
+          });
+        }
+      );
+
+      setError(null);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+      setError('Something went wrong.Try again.');
+    }
+  };
+
   return (
     <>
       <Center w='100vw' h='100vh' bgGradient='linear(to-r, blue.200, blue.300)'>
-        <Container bgColor='gray.50' p='8' rounded='md' boxShadow='xl'>
+        <Container bgColor='gray.50' p='8' rounded='xl' boxShadow='xl'>
           <Flex
             display='flex'
             direction='column'
@@ -43,17 +169,19 @@ const Form = ({ location }) => {
             </Heading>
           </Flex>
 
-          <FormControl>
+          {/* =============== form =============== */}
+          <FormControl as='form' isInvalid={error} onSubmit={handleSubmit}>
             <Flex direction='column'>
               {/* name */}
               {location === 'Register' && (
                 <>
                   <FormLabel htmlFor='name'>Display Name</FormLabel>
                   <Input
-                    id='name'
+                    id='displayName'
                     type='text'
                     placeholder='Hong Dusik'
                     mb='4'
+                    onChange={handleChange}
                   />
                 </>
               )}
@@ -65,6 +193,7 @@ const Form = ({ location }) => {
                 id='email'
                 placeholder='chiefhong@mail.com'
                 mb='4'
+                onChange={handleChange}
               />
 
               {/* password */}
@@ -73,8 +202,25 @@ const Form = ({ location }) => {
                 type='password'
                 id='password'
                 placeholder='******'
+                _placeholder={{ letterSpacing: ' 2px', fontSize: '20px' }}
                 mb='4'
+                onChange={handleChange}
               />
+
+              {/* confirm password  */}
+              {location === 'Register' && (
+                <>
+                  <FormLabel htmlFor='password'>Confirm Password</FormLabel>
+                  <Input
+                    type='password'
+                    id='confirmPassword'
+                    placeholder='******'
+                    _placeholder={{ letterSpacing: ' 2px', fontSize: '20px' }}
+                    mb='4'
+                    onChange={handleChange}
+                  />
+                </>
+              )}
 
               {/* picture  */}
               {location === 'Register' && (
@@ -87,15 +233,28 @@ const Form = ({ location }) => {
                   >
                     <Icon as={FcAddImage} w='12' h='12' mr='2' />
                     <Text as='span' color='gray.500' fontWeight='normal'>
-                      Add an avatar
+                      {file ? file.name : 'Add an avatar'}
                     </Text>
                   </FormLabel>
-                  <Input id='file' type='file' sx={{ display: 'none' }} />
+                  <Input
+                    id='file'
+                    type='file'
+                    sx={{ display: 'none' }}
+                    onChange={handleChange}
+                  />
                 </>
               )}
 
-              <Button colorScheme='blue' variant='solid' mt='6'>
-                Sign Up
+              {error && <FormErrorMessage>{error}</FormErrorMessage>}
+
+              <Button
+                type='submit'
+                colorScheme='blue'
+                variant='solid'
+                mt='6'
+                onSubmit={handleSubmit}
+              >
+                {isLoading ? <Spinner /> : 'Sign Up'}
               </Button>
             </Flex>
           </FormControl>

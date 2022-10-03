@@ -6,16 +6,12 @@ const Home = () => {
   return (
     <Flex
       as='main'
-      backgroundColor='red'
-      // h='100%'
-      // w='100%'
       alignItems='center'
       justifyContent='center'
       overflow='hidden'
       h='100vh'
       w='100vw'
     >
-      {/* <Box maxHeight='90%' maxWidth='100%'> */}
       <Box
         w={['100%', '95%', '80%', '75%', '65%']}
         h={['100%', '90%', '80%']}
@@ -35,7 +31,6 @@ const Home = () => {
           <Chat />
         </Flex>
       </Box>
-      {/* </Box> */}
     </Flex>
   );
 };

@@ -30,7 +30,7 @@ const Chat = () => {
         color='gray.200'
         backgroundColor='blue.600'
         h='20'
-        p='2'
+        py='5'
         px={3}
         alignItems='center'
         justifyContent='space-between'

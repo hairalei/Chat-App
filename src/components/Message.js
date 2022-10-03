@@ -15,6 +15,7 @@ const Message = ({ owner }) => {
           </Text>
         </Box>
 
+        {/* message content  */}
         <Flex
           direction='column'
           maxWidth='80%'
