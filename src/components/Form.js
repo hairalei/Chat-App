@@ -15,7 +15,7 @@ import {
   Spinner,
 } from '@chakra-ui/react';
 import { FcAddImage } from 'react-icons/fc';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -45,6 +45,8 @@ const Form = ({ location }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formValues, setFormValues] = useState(initialFormValues);
   const { displayName, email, password, confirmPassword, file } = formValues;
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -127,16 +129,19 @@ const Form = ({ location }) => {
             };
             delete formDataCopy.password;
             delete formDataCopy.confirmPassword;
+            delete formDataCopy.file;
             formDataCopy.timestamp = serverTimestamp();
 
             await setDoc(doc(db, 'users', user.uid), formDataCopy);
-            console.log(downloadURL);
+
+            await setDoc(doc(db, 'userChats', user.uid), {});
           });
         }
       );
 
       setError(null);
       setIsLoading(false);
+      navigate('/');
     } catch (error) {
       setIsLoading(false);
       console.log(error);
