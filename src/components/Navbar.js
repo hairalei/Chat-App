@@ -13,6 +13,8 @@ import {
 import React from 'react';
 import logo from '../assets/LOGO.svg';
 import { FaChevronCircleDown } from 'react-icons/fa';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase.config';
 
 const Navbar = () => {
   return (
@@ -46,7 +48,7 @@ const Navbar = () => {
           </MenuButton>
           <MenuList color='blue.900'>
             <MenuItem>Profile</MenuItem>
-            <MenuItem>Logout</MenuItem>
+            <MenuItem onClick={() => signOut(auth)}>Logout</MenuItem>
           </MenuList>
         </Menu>
       </Flex>
