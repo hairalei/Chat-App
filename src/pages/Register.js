@@ -114,8 +114,11 @@ const Register = () => {
       );
 
       setError(null);
-      setIsLoading(false);
-      navigate('/');
+
+      setTimeout(() => {
+        navigate('/');
+        setIsLoading(false);
+      }, 5000);
     } catch (error) {
       setIsLoading(false);
       console.log(error);
