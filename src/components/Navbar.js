@@ -15,8 +15,14 @@ import logo from '../assets/LOGO.svg';
 import { FaChevronCircleDown } from 'react-icons/fa';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase.config';
+import { useAuthContext } from '../context/AuthContext';
 
 const Navbar = () => {
+  const { currentUser } = useAuthContext();
+  const { displayName, photoURL } = currentUser;
+
+  console.log(currentUser);
+
   return (
     <Flex
       justifyContent='space-around'
@@ -36,13 +42,9 @@ const Navbar = () => {
             rightIcon={<FaChevronCircleDown />}
           >
             <Flex alignItems='center' justifyContent='center'>
-              <Avatar
-                name='user'
-                src='https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=600'
-                mr='2'
-              />
+              <Avatar name='user' src={photoURL} mr='2' />
               <Text as='span' display={['none', 'inline-block']}>
-                Hong Dusik
+                {displayName}
               </Text>
             </Flex>
           </MenuButton>

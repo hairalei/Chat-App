@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   FormControl,
   FormLabel,
@@ -15,140 +15,17 @@ import {
   Spinner,
 } from '@chakra-ui/react';
 import { FcAddImage } from 'react-icons/fc';
-import { Link, useNavigate } from 'react-router-dom';
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  updateProfile,
-} from 'firebase/auth';
-import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from 'firebase/storage';
-import { auth, db, storage } from '../firebase.config';
+import { Link } from 'react-router-dom';
 import logo from '../assets/LogoWithName.svg';
-import { async } from '@firebase/util';
 
-const initialFormValues = {
-  displayName: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-  file: '',
-};
-
-const Form = ({ location }) => {
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [formValues, setFormValues] = useState(initialFormValues);
-  const { displayName, email, password, confirmPassword, file } = formValues;
-
-  const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-
-    setFormValues((prev) => {
-      return { ...prev, [id]: value };
-    });
-
-    if (e.target.id === 'file') {
-      console.log(e.target.files[0].name);
-      setFormValues((prev) => {
-        return { ...prev, file: e.target.files[0] };
-      });
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    if (!displayName || !email || !password || !confirmPassword) {
-      setError('All fields are required');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-
-    try {
-      const res = await createUserWithEmailAndPassword(auth, email, password);
-      const user = res.user;
-
-      // for photo storage
-      const metadata = {
-        contentType: 'image/jpeg',
-      };
-      // Create a reference to 'mountains.jpg'
-      const storageRef = ref(storage, `${displayName}.jpg`);
-
-      // Create a reference to 'images/mountains.jpg'
-      const storageImagesRef = ref(storage, `images/${displayName}.jpg`);
-      const uploadTask = uploadBytesResumable(storageRef, file, metadata);
-
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload is ' + progress + '% done');
-          switch (snapshot.state) {
-            case 'paused':
-              console.log('Upload is paused');
-              break;
-            case 'running':
-              console.log('Upload is running');
-              break;
-          }
-        },
-        (error) => {
-          // Handle unsuccessful uploads
-          setError('Photo upload failed');
-        },
-        () => {
-          // Handle successful uploads on complete
-          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            await updateProfile(auth.currentUser, {
-              displayName,
-              photoURL: downloadURL,
-            });
-
-            // for firestore database, copy of user's info
-            const formDataCopy = {
-              ...formValues,
-              uid: user.uid,
-              displayName,
-              photoURL: downloadURL,
-            };
-            delete formDataCopy.password;
-            delete formDataCopy.confirmPassword;
-            delete formDataCopy.file;
-            formDataCopy.timestamp = serverTimestamp();
-
-            await setDoc(doc(db, 'users', user.uid), formDataCopy);
-
-            await setDoc(doc(db, 'userChats', user.uid), {});
-          });
-        }
-      );
-
-      setError(null);
-      setIsLoading(false);
-      navigate('/');
-    } catch (error) {
-      setIsLoading(false);
-      console.log(error);
-      setError('Something went wrong.Try again.');
-    }
-  };
-
+const Form = ({
+  location,
+  handleSubmit,
+  error,
+  isLoading,
+  file,
+  handleChange,
+}) => {
   return (
     <>
       <Center w='100vw' h='100vh' bgGradient='linear(to-r, blue.200, blue.300)'>
@@ -258,8 +135,10 @@ const Form = ({ location }) => {
                 variant='solid'
                 mt='6'
                 onSubmit={handleSubmit}
+                textTransform='uppercase'
+                letterSpacing='2px'
               >
-                {isLoading ? <Spinner /> : 'Sign Up'}
+                {isLoading ? <Spinner /> : location}
               </Button>
             </Flex>
           </FormControl>
