@@ -9,6 +9,7 @@ import {
   FormControl,
   Spinner,
   Center,
+  useToast,
 } from '@chakra-ui/react';
 import {
   collection,
@@ -31,6 +32,8 @@ const Search = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hide, setHide] = useState(false);
   const { currentUser } = useAuthContext();
+
+  const toast = useToast();
 
   useEffect(() => {
     setHide(true);
@@ -147,6 +150,13 @@ const Search = () => {
             display={hide ? 'none' : 'block'}
             onClick={() => {
               handleSelect(result);
+
+              toast({
+                title: 'Added as friend',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+              });
             }}
             cursor='pointer'
           >

@@ -10,7 +10,7 @@ import {
   Icon,
   Text,
 } from '@chakra-ui/react';
-import { BsEmojiSmile, BsImage } from 'react-icons/bs';
+import { BsEmojiSmile, BsHandThumbsUp, BsImage } from 'react-icons/bs';
 import { useAuthContext } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
 import {
@@ -32,7 +32,7 @@ const ChatInput = () => {
   const { currentUser } = useAuthContext();
   const { data } = useChatContext();
 
-  const handleSend = async () => {
+  const handleSend = async (emoji) => {
     console.log('send');
     if (img) {
       const storageRef = ref(storage, uuid());
@@ -79,6 +79,17 @@ const ChatInput = () => {
         messages: arrayUnion({
           id: uuid(),
           text,
+          senderId: currentUser.uid,
+          date: Timestamp.now(),
+        }),
+      });
+    }
+
+    if (emoji) {
+      await updateDoc(doc(db, 'chats', data.chatId), {
+        messages: arrayUnion({
+          id: uuid(),
+          text: emoji,
           senderId: currentUser.uid,
           date: Timestamp.now(),
         }),
@@ -134,7 +145,8 @@ const ChatInput = () => {
           <IconButton
             variant='ghost'
             colorScheme='twitter'
-            icon={<BsEmojiSmile />}
+            icon={<BsHandThumbsUp />}
+            onClick={() => handleSend('👍🏻')}
           />
 
           <Box mt={2} ml={2} display='flex' alignItems='center'>

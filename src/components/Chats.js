@@ -23,6 +23,15 @@ const Chats = () => {
     currentUser.uid && getChats();
   }, [currentUser.uid]);
 
+  //automatically select the latest chat when page loads
+  useEffect(() => {
+    const latestChat = Object.entries(chats)?.sort(
+      (a, b) => b[1].date - a[1].date
+    )[0];
+
+    latestChat && handleSelect(latestChat[1].userInfo);
+  }, [chats]);
+
   const handleSelect = (userInfo) => {
     dispatch({ type: 'CHANGE_USER', payload: userInfo });
     setActive(userInfo.uid);
