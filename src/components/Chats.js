@@ -53,7 +53,7 @@ const Chats = () => {
                 key={chatID}
                 backgroundColor={active === uid && 'blue.800'}
                 onClick={() => handleSelect(userFriend.userInfo)}
-                py={3}
+                p={3}
               >
                 {/* profile pic */}
                 <Avatar name={displayName} src={photoURL} mr='2' />

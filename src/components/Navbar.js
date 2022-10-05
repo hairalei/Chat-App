@@ -9,9 +9,12 @@ import {
   MenuList,
   MenuItem,
   Button,
+  Image,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import React from 'react';
 import logo from '../assets/LOGO.svg';
+import logoWithName from '../assets/LogoWithName.svg';
 import { FaChevronCircleDown } from 'react-icons/fa';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase.config';
@@ -20,18 +23,23 @@ import { useAuthContext } from '../context/AuthContext';
 const Navbar = () => {
   const { currentUser } = useAuthContext();
   const { displayName, photoURL } = currentUser;
+  const [isLargerThan1400] = useMediaQuery('(min-width: 1400px)');
 
   return (
     <Flex
-      justifyContent='space-around'
       as='nav'
       backgroundColor='blue.900'
       h='20'
-      py='2'
+      p='2'
+      px={3}
+      alignItems='center'
     >
-      <img src={logo} alt='logo' mx='8' width='42' height='42' />
+      {isLargerThan1400 && <Image src={logoWithName} alt='logo' width={40} />}
+      {!isLargerThan1400 && (
+        <Image src={logo} alt='logo' width={42} height={42} />
+      )}
 
-      <Flex alignItems='center' justifyContent='center'>
+      <Flex alignItems='center' justifyContent='center' ml='auto'>
         <Menu>
           <MenuButton
             as={Button}

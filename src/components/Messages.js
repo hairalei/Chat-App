@@ -29,11 +29,13 @@ const Messages = () => {
   }, [messages]);
 
   useEffect(() => {
-    const unsub = onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
-      doc.exists() && setMessages(doc.data().messages);
-    });
+    if (data.chatId) {
+      const unsub = onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
+        doc.exists() && setMessages(doc.data().messages);
+      });
 
-    return () => unsub();
+      return () => unsub();
+    }
   }, [data.chatId]);
 
   return (

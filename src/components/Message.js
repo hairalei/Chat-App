@@ -29,7 +29,7 @@ const Message = ({ message }) => {
             as='span'
             display='block'
             color='gray.500'
-            fontSize='sm'
+            fontSize='xs'
             textAlign={owner ? 'right' : 'left'}
           >
             {moment(new Date(message.date.seconds * 1000)).calendar()}
