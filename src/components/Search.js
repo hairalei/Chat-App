@@ -10,8 +10,19 @@ import {
   Spinner,
   Center,
 } from '@chakra-ui/react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  getDoc,
+  setDoc,
+  doc,
+  updateDoc,
+  serverTimestamp,
+} from 'firebase/firestore';
 import { db } from '../firebase.config';
+import { useAuthContext } from '../context/AuthContext';
 
 const Search = () => {
   const [username, setUsername] = useState('');
@@ -19,9 +30,9 @@ const Search = () => {
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [hide, setHide] = useState(false);
+  const { currentUser } = useAuthContext();
 
   useEffect(() => {
-    console.log('effect');
     setHide(true);
   }, []);
 
@@ -53,7 +64,48 @@ const Search = () => {
     setIsLoading(false);
   };
 
-  const handleSelect = () => {};
+  const handleSelect = async () => {
+    console.log('click');
+    // checks if chats in firestore exists, if not create
+    const combinedId =
+      currentUser.uid > user.uid
+        ? currentUser.uid + user.uid
+        : user.uid + currentUser.uid;
+
+    try {
+      const res = await getDoc(doc(db, 'chats', combinedId));
+
+      if (!res.exists()) {
+        // craete chat in chats collection
+        await setDoc(doc(db, 'chats', combinedId), { messages: [] });
+      }
+      //create use chats
+      await updateDoc(doc(db, 'userChats', currentUser.uid), {
+        [combinedId + '.userInfo']: {
+          uid: user.uid,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+        },
+        [combinedId + '.date']: serverTimestamp(),
+      });
+
+      await updateDoc(doc(db, 'userChats', user.uid), {
+        [combinedId + '.userInfo']: {
+          uid: currentUser.uid,
+          displayName: currentUser.displayName,
+          photoURL: currentUser.photoURL,
+        },
+        [combinedId + '.date']: serverTimestamp(),
+      });
+    } catch (error) {
+      console.log(error);
+      setError('Something went wrong. Try again.');
+    }
+
+    setUser(null);
+    setUsername('');
+    setHide(true);
+  };
 
   return (
     <div>
@@ -70,6 +122,7 @@ const Search = () => {
           setHide(true);
         }}
         onKeyDown={handleSearch}
+        value={username}
       />
       {isLoading && (
         <Center>
@@ -105,6 +158,18 @@ const Search = () => {
             opacity={isLoading ? 0 : 1}
           >
             User does not exists
+          </Text>
+        )}
+        {error && (
+          <Text
+            as='p'
+            px='2'
+            pb='3'
+            fontSize='md'
+            color='red.300'
+            opacity={isLoading ? 0 : 1}
+          >
+            {error}
           </Text>
         )}
       </Flex>

@@ -42,11 +42,13 @@ const Register = () => {
     setIsLoading(true);
 
     if (!displayName || !email || !password || !confirmPassword) {
+      setIsLoading(false);
       setError('All fields are required');
       return;
     }
 
     if (password !== confirmPassword) {
+      setIsLoading(false);
       setError('Passwords do not match');
       return;
     }

@@ -11,9 +11,12 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { IoPersonAdd, IoEllipsisHorizontalSharp } from 'react-icons/io5';
+import { useChatContext } from '../context/ChatContext';
 import { Messages, ChatInput } from './';
 
 const Chat = () => {
+  const { data } = useChatContext();
+
   return (
     <Flex
       as='section'
@@ -41,7 +44,7 @@ const Chat = () => {
           size={['md', 'lg']}
           fontWeight={{ base: 'normal', md: 'medium' }}
         >
-          Dusik
+          {data.user?.displayName}
         </Heading>
 
         {/* icon group */}
