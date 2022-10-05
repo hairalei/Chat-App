@@ -62,10 +62,10 @@ const Register = () => {
         contentType: 'image/jpeg',
       };
       // Create a reference
-      const storageRef = ref(storage, `${displayName}.jpg`);
+      const storageRef = ref(storage, `${email}.jpg`);
 
       // Create a reference
-      const storageImagesRef = ref(storage, `images/${displayName}.jpg`);
+      const storageImagesRef = ref(storage, `images/${email}.jpg`);
       const uploadTask = uploadBytesResumable(storageRef, file, metadata);
 
       uploadTask.on(

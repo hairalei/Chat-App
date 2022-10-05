@@ -26,7 +26,7 @@ import { useAuthContext } from '../context/AuthContext';
 
 const Search = () => {
   const [username, setUsername] = useState('');
-  const [user, setUser] = useState(null);
+  const [results, setResults] = useState([]);
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [hide, setHide] = useState(false);
@@ -41,7 +41,7 @@ const Search = () => {
 
     setHide(false);
     setError(null);
-    setUser(null);
+    setResults([]);
     setIsLoading(true);
 
     const q = query(
@@ -53,7 +53,9 @@ const Search = () => {
       const querySnapshot = await getDocs(q);
 
       querySnapshot.forEach(async (doc) => {
-        setUser(doc.data());
+        setResults((prev) => {
+          return [...prev, doc.data()];
+        });
       });
     } catch (error) {
       console.log(error);
@@ -64,8 +66,7 @@ const Search = () => {
     setIsLoading(false);
   };
 
-  const handleSelect = async () => {
-    console.log('click');
+  const handleSelect = async (user) => {
     // checks if chats in firestore exists, if not create
     const combinedId =
       currentUser.uid > user.uid
@@ -102,7 +103,6 @@ const Search = () => {
       setError('Something went wrong. Try again.');
     }
 
-    setUser(null);
     setUsername('');
     setHide(true);
   };
@@ -131,48 +131,57 @@ const Search = () => {
       )}
 
       {/* User result  */}
-      <Flex
-        as='section'
-        gap='3'
-        direction='column'
-        px='2'
-        borderBottom='1px'
-        borderColor='gray.300'
-        pb='3'
-        display={hide ? 'none' : 'block'}
-        onClick={handleSelect}
-        cursor='pointer'
-      >
-        {user && !isLoading ? (
-          <Flex alignItems='center'>
-            <Avatar name={user.displayName} src={user.photoURL} mr='2' />
-            <Text as='span'>{user.displayName}</Text>
+      {results.map((result, idx) => {
+        const { displayName, email, photoURL, uid } = result;
+
+        return (
+          <Flex
+            key={idx}
+            as='section'
+            gap='3'
+            direction='column'
+            px='2'
+            borderBottom='1px'
+            borderColor='gray.300'
+            pb='3'
+            display={hide ? 'none' : 'block'}
+            onClick={() => {
+              handleSelect(result);
+            }}
+            cursor='pointer'
+          >
+            {!isLoading ? (
+              <Flex alignItems='center'>
+                <Avatar name={displayName} src={photoURL} mr='2' />
+                <Text as='span'>{displayName}</Text>
+              </Flex>
+            ) : (
+              <Text
+                as='p'
+                px='2'
+                pb='3'
+                fontSize='md'
+                color='red.300'
+                opacity={isLoading ? 0 : 1}
+              >
+                User does not exists
+              </Text>
+            )}
+            {error && (
+              <Text
+                as='p'
+                px='2'
+                pb='3'
+                fontSize='md'
+                color='red.300'
+                opacity={isLoading ? 0 : 1}
+              >
+                {error}
+              </Text>
+            )}
           </Flex>
-        ) : (
-          <Text
-            as='p'
-            px='2'
-            pb='3'
-            fontSize='md'
-            color='red.300'
-            opacity={isLoading ? 0 : 1}
-          >
-            User does not exists
-          </Text>
-        )}
-        {error && (
-          <Text
-            as='p'
-            px='2'
-            pb='3'
-            fontSize='md'
-            color='red.300'
-            opacity={isLoading ? 0 : 1}
-          >
-            {error}
-          </Text>
-        )}
-      </Flex>
+        );
+      })}
     </div>
   );
 };

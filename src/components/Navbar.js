@@ -21,8 +21,6 @@ const Navbar = () => {
   const { currentUser } = useAuthContext();
   const { displayName, photoURL } = currentUser;
 
-  console.log(currentUser);
-
   return (
     <Flex
       justifyContent='space-around'

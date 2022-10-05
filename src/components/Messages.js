@@ -25,7 +25,7 @@ const Messages = () => {
   }, [data.chatId]);
 
   return (
-    <Flex direction='column' p={3} py={4} gap={4}>
+    <Flex direction='column' p={6}>
       {messages.map((message) => {
         return <Message message={message} key={message.id} />;
       })}

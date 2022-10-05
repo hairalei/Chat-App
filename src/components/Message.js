@@ -1,5 +1,6 @@
 import { Avatar, Box, Flex, Image, Text } from '@chakra-ui/react';
 import userEvent from '@testing-library/user-event';
+import moment from 'moment';
 import React, { useEffect } from 'react';
 import { useAuthContext } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
@@ -10,33 +11,46 @@ const Message = ({ message }) => {
 
   const owner = message.senderId === currentUser.uid;
 
-  console.log(owner);
-  console.log(message);
-
   return (
     <Box color='gray.900' mb={3}>
-      <Flex gap={2} direction={owner && 'row-reverse'}>
-        <Box m={2}>
+      <Flex direction={owner && 'row-reverse'}>
+        <Flex
+          m={2}
+          direction='column'
+          maxWidth={16}
+          alignItems={owner && 'flex-end'}
+        >
           <Avatar
+            mt={-3}
             name="user's friend"
             src={owner ? currentUser.photoURL : data.user.photoURL}
           />
-          <Text as='span' display='block' color='gray.500' fontSize='sm'>
-            Just now
+          <Text
+            as='span'
+            display='block'
+            color='gray.500'
+            fontSize='sm'
+            textAlign={owner ? 'right' : 'left'}
+          >
+            {moment(new Date(message.date.seconds * 1000)).calendar()}
+            {/* {new Date(message.date.seconds * 1000).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            })} */}
           </Text>
-        </Box>
+        </Flex>
 
         {/* message content  */}
         <Flex
           direction='column'
-          maxWidth='80%'
+          maxWidth='60%'
           alignItems={owner && 'flex-end'}
         >
           {message.text && (
             <Text
               as='p'
               maxWidth='max-content'
-              backgroundColor='white'
+              backgroundColor={owner ? 'blue.200' : 'white'}
               p={3}
               borderRadius='xl'
               borderTopLeftRadius={!owner && 0}
@@ -50,8 +64,9 @@ const Message = ({ message }) => {
             <Image
               src={message.img}
               alt='image'
-              boxSize='80%'
+              boxSize='90%'
               objectFit='cover'
+              mt={2}
             />
           )}
         </Flex>
