@@ -19,10 +19,12 @@ import { FaChevronCircleDown } from 'react-icons/fa';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase.config';
 import { useAuthContext } from '../context/AuthContext';
+import { useChatContext } from '../context/ChatContext';
 
 const Navbar = () => {
   const { currentUser } = useAuthContext();
   const { displayName, photoURL } = currentUser;
+  const { dispatch } = useChatContext();
   const [isLargerThan1400] = useMediaQuery('(min-width: 1400px)');
 
   return (
@@ -56,7 +58,14 @@ const Navbar = () => {
           </MenuButton>
           <MenuList color='blue.900'>
             <MenuItem>Profile</MenuItem>
-            <MenuItem onClick={() => signOut(auth)}>Logout</MenuItem>
+            <MenuItem
+              onClick={() => {
+                signOut(auth);
+                dispatch({ type: 'RESET_STATE' });
+              }}
+            >
+              Logout
+            </MenuItem>
           </MenuList>
         </Menu>
       </Flex>

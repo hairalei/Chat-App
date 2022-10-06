@@ -15,18 +15,18 @@ import React from 'react';
 import { IoPerson, IoEllipsisHorizontalSharp } from 'react-icons/io5';
 import { useChatContext } from '../context/ChatContext';
 import { Messages, ChatInput } from './';
-import ModalSettings from './ModalSettings';
+import ModalButton from './ModalButton';
+import { themes } from '../utils/utils';
 
 const Chat = () => {
   const { data } = useChatContext();
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { dark, light } = themes[data.theme];
 
   return (
     <Flex
       as='section'
       flex='2'
-      backgroundColor='blue.100'
+      backgroundColor={light}
       direction='column'
       position='relative'
       height='100%'
@@ -36,7 +36,7 @@ const Chat = () => {
       <Flex
         as='header'
         color='gray.200'
-        backgroundColor='blue.600'
+        backgroundColor={dark}
         h='20'
         py='5'
         px={3}
@@ -83,12 +83,9 @@ const Chat = () => {
               <MenuList color='blue.900'>
                 <MenuItem>Change Nickname</MenuItem>
 
-                <MenuItem onClick={onOpen}>Change Emoji</MenuItem>
-                <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
-                  <ModalSettings title={'emoji'} onClose={onClose} />
-                </Modal>
+                <ModalButton title='emoji' />
 
-                <MenuItem>Change Theme</MenuItem>
+                <ModalButton title='theme' />
 
                 <MenuItem color='red.500'>Unfriend</MenuItem>
               </MenuList>

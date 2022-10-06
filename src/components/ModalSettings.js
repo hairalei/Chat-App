@@ -45,15 +45,11 @@ const ModalSettings = ({ title, onClose }) => {
     try {
       //create user chats
       await updateDoc(doc(db, 'userChats', currentUser.uid), {
-        [combinedId + '.chatSettings']: {
-          [key]: value,
-        },
+        [combinedId + '.chatSettings' + `.${key}`]: value,
       });
 
       await updateDoc(doc(db, 'userChats', user.uid), {
-        [combinedId + '.chatSettings']: {
-          [key]: value,
-        },
+        [combinedId + '.chatSettings' + `.${key}`]: value,
       });
     } catch (error) {
       console.log(error);
@@ -76,9 +72,14 @@ const ModalSettings = ({ title, onClose }) => {
           >
             {options.map((value) => {
               const radio = getRadioProps({ value });
+
               return (
-                <RadioCard key={value} {...radio}>
-                  {settings[value].component}
+                <RadioCard
+                  key={value}
+                  {...radio}
+                  color={title === 'theme' && settings[value]}
+                >
+                  {title === 'emoji' ? settings[value].component : 'color'}
                 </RadioCard>
               );
             })}

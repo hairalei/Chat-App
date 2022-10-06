@@ -18,6 +18,7 @@ export const ChatContextProvider = ({ children }) => {
     chatId: 'null',
     user: {},
     emoji: 'like',
+    theme: 'blue',
   };
 
   const chatReducer = (state, action) => {
@@ -36,6 +37,17 @@ export const ChatContextProvider = ({ children }) => {
         return {
           ...state,
           emoji: action.payload,
+        };
+
+      case 'CHANGE_THEME':
+        return {
+          ...state,
+          theme: action.payload,
+        };
+
+      case 'RESET_STATE':
+        return {
+          ...INITIAL_STATE,
         };
     }
 
@@ -56,11 +68,16 @@ export const ChatContextProvider = ({ children }) => {
           type: 'CHANGE_EMOJI',
           payload: doc.data()[combinedId]['chatSettings']['chatEmoji'],
         });
+
+        dispatch({
+          type: 'CHANGE_THEME',
+          payload: doc.data()[combinedId]['chatSettings']['chatTheme'],
+        });
       });
 
       return () => unsub();
     }
-  }, [state.user.uid]);
+  }, [state.user]);
 
   return (
     <ChatContext.Provider value={{ data: state, dispatch }}>

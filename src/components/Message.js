@@ -1,5 +1,4 @@
 import { Avatar, Box, Flex, Image, Text } from '@chakra-ui/react';
-import userEvent from '@testing-library/user-event';
 import moment from 'moment';
 import React, { useEffect } from 'react';
 import { useAuthContext } from '../context/AuthContext';
@@ -8,6 +7,7 @@ import { useChatContext } from '../context/ChatContext';
 const Message = ({ message }) => {
   const { currentUser } = useAuthContext();
   const { data } = useChatContext();
+  const { theme } = data;
 
   const owner = message.senderId === currentUser.uid;
 
@@ -33,10 +33,6 @@ const Message = ({ message }) => {
             textAlign={owner ? 'right' : 'left'}
           >
             {moment(new Date(message.date.seconds * 1000)).calendar()}
-            {/* {new Date(message.date.seconds * 1000).toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-            })} */}
           </Text>
         </Flex>
 
@@ -50,7 +46,7 @@ const Message = ({ message }) => {
             <Text
               as='p'
               maxWidth='max-content'
-              backgroundColor={owner ? 'blue.200' : 'white'}
+              backgroundColor={owner ? `${theme}.200` : 'white'}
               p={3}
               borderRadius='xl'
               borderTopLeftRadius={!owner && 0}
