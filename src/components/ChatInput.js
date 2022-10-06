@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Flex,
@@ -17,7 +17,6 @@ import { useChatContext } from '../context/ChatContext';
 import {
   arrayUnion,
   doc,
-  onSnapshot,
   serverTimestamp,
   Timestamp,
   updateDoc,
@@ -30,30 +29,11 @@ import { emojis } from '../utils/utils';
 const ChatInput = () => {
   const [text, setText] = useState('');
   const [img, setImg] = useState(null);
-  const [emoji, setEmoji] = useState(null);
 
   const { currentUser } = useAuthContext();
   const { data } = useChatContext();
 
   const toast = useToast();
-
-  // console.log(data);
-
-  useEffect(() => {
-    if (data.user.uid) {
-      const combinedId =
-        currentUser.uid > data.user.uid
-          ? currentUser.uid + data.user.uid
-          : data.user.uid + currentUser.uid;
-
-      const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
-        // console.log(doc.data()[combinedId]['chatSettings']['chatEmoji']);
-        setEmoji(doc.data()[combinedId]['chatSettings']['chatEmoji']);
-      });
-
-      return () => unsub();
-    }
-  }, [data.user.uid]);
 
   const handleSend = async (emoji) => {
     console.log('send');
@@ -175,8 +155,12 @@ const ChatInput = () => {
           <IconButton
             variant='ghost'
             colorScheme='twitter'
-            icon={(emoji && emojis[emoji]['component']) || <BsHandThumbsUp />}
-            onClick={() => handleSend(emoji && emojis[emoji]['emoji']) || '👍🏻'}
+            icon={
+              (data && emojis[data.emoji]['component']) || <BsHandThumbsUp />
+            }
+            onClick={() =>
+              handleSend(data && emojis[data.emoji]['emoji']) || '👍🏻'
+            }
           />
 
           <Box mt={2} ml={2} display='flex' alignItems='center'>

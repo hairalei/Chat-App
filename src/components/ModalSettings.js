@@ -7,30 +7,14 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Text,
-  IconButton,
-  Icon,
-  RadioGroup,
-  Stack,
-  Radio,
   useRadioGroup,
-  HStack,
   Flex,
 } from '@chakra-ui/react';
 import { emojis, themes } from '../utils/utils';
 import RadioCard from './RadioCard';
-
-import {
-  BsHandThumbsUp,
-  BsHeart,
-  BsEmojiLaughing,
-  BsEmojiAngry,
-  BsEmojiHeartEyes,
-  BsEmojiDizzy,
-} from 'react-icons/bs';
 import { useAuthContext } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase.config';
 
 const ModalSettings = ({ title, onClose }) => {
@@ -44,7 +28,7 @@ const ModalSettings = ({ title, onClose }) => {
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'emojis',
-    defaultValue: 'like',
+    defaultValue: data.emoji,
     onChange: setValue,
   });
 

@@ -89,6 +89,7 @@ const Chat = () => {
                 </Modal>
 
                 <MenuItem>Change Theme</MenuItem>
+
                 <MenuItem color='red.500'>Unfriend</MenuItem>
               </MenuList>
             </Menu>
