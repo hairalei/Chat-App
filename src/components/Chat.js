@@ -8,14 +8,19 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  useDisclosure,
+  Modal,
 } from '@chakra-ui/react';
 import React from 'react';
-import { IoPersonAdd, IoEllipsisHorizontalSharp } from 'react-icons/io5';
+import { IoPerson, IoEllipsisHorizontalSharp } from 'react-icons/io5';
 import { useChatContext } from '../context/ChatContext';
 import { Messages, ChatInput } from './';
+import ModalSettings from './ModalSettings';
 
 const Chat = () => {
   const { data } = useChatContext();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Flex
@@ -54,8 +59,8 @@ const Chat = () => {
             size='md'
             color='white'
             _hover={{ color: 'blue', background: 'white' }}
-            aria-label='add-friend'
-            icon={<Icon as={IoPersonAdd} boxSize={[6, 7]} />}
+            aria-label='view-profile'
+            icon={<Icon as={IoPerson} boxSize={[6, 7]} />}
           />
 
           <Box>
@@ -77,8 +82,14 @@ const Chat = () => {
               />
               <MenuList color='blue.900'>
                 <MenuItem>Change Nickname</MenuItem>
+
+                <MenuItem onClick={onOpen}>Change Emoji</MenuItem>
+                <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
+                  <ModalSettings title={'emoji'} onClose={onClose} />
+                </Modal>
+
                 <MenuItem>Change Theme</MenuItem>
-                <MenuItem>Block</MenuItem>
+                <MenuItem color='red.500'>Unfriend</MenuItem>
               </MenuList>
             </Menu>
           </Box>

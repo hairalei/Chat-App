@@ -81,9 +81,11 @@ const Search = () => {
 
       if (!res.exists()) {
         // craete chat in chats collection
-        await setDoc(doc(db, 'chats', combinedId), { messages: [] });
+        await setDoc(doc(db, 'chats', combinedId), {
+          messages: [],
+        });
       }
-      //create use chats
+      //create user chats
       await updateDoc(doc(db, 'userChats', currentUser.uid), {
         [combinedId + '.userInfo']: {
           uid: user.uid,
@@ -91,6 +93,10 @@ const Search = () => {
           photoURL: user.photoURL,
         },
         [combinedId + '.date']: serverTimestamp(),
+        [combinedId + '.chatSettings']: {
+          chatEmoji: 'like',
+          chatTheme: 'blue',
+        },
       });
 
       await updateDoc(doc(db, 'userChats', user.uid), {
@@ -100,6 +106,10 @@ const Search = () => {
           photoURL: currentUser.photoURL,
         },
         [combinedId + '.date']: serverTimestamp(),
+        [combinedId + '.chatSettings']: {
+          chatEmoji: 'like',
+          chatTheme: 'blue',
+        },
       });
     } catch (error) {
       console.log(error);

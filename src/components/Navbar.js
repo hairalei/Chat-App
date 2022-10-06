@@ -34,7 +34,7 @@ const Navbar = () => {
       px={3}
       alignItems='center'
     >
-      {isLargerThan1400 && <Image src={logoWithName} alt='logo' width={40} />}
+      {isLargerThan1400 && <Image src={logoWithName} alt='logo' width={44} />}
       {!isLargerThan1400 && (
         <Image src={logo} alt='logo' width={42} height={42} />
       )}
