@@ -115,7 +115,13 @@ const Form = ({
                   >
                     <Icon as={FcAddImage} w='12' h='12' mr='2' />
                     <Text as='span' color='gray.500' fontWeight='normal'>
-                      {file ? file.name : 'Add an avatar'}
+                      {file
+                        ? file.name.length > 35
+                          ? `${file.name.substring(0, 30)}...${file.name.slice(
+                              -3
+                            )}`
+                          : file.name
+                        : 'Add an avatar'}
                     </Text>
                   </FormLabel>
                   <Input

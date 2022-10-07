@@ -30,7 +30,6 @@ const Register = () => {
     });
 
     if (e.target.id === 'file') {
-      console.log(e.target.files[0].name);
       setFormValues((prev) => {
         return { ...prev, file: e.target.files[0] };
       });
