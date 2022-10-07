@@ -202,7 +202,11 @@ const ChatInput = () => {
             onChange={(e) => setImg(e.target.files[0])}
           />
 
-          <Button variant='ghost' colorScheme='twitter' onClick={handleSend}>
+          <Button
+            variant='ghost'
+            colorScheme='twitter'
+            onClick={() => handleSend()}
+          >
             Send
           </Button>
         </Flex>
