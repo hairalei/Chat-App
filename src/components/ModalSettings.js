@@ -9,23 +9,35 @@ import {
   ModalFooter,
   useRadioGroup,
   Flex,
+  Input,
+  FormLabel,
 } from '@chakra-ui/react';
 import { emojis, themes } from '../utils/utils';
 import RadioCard from './RadioCard';
 import { useAuthContext } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
-import { doc, updateDoc } from 'firebase/firestore';
+import {
+  arrayUnion,
+  doc,
+  serverTimestamp,
+  Timestamp,
+  updateDoc,
+} from 'firebase/firestore';
 import { db } from '../firebase.config';
+import { v4 as uuid } from 'uuid';
 
 const ModalSettings = ({ title, onClose }) => {
   const [value, setValue] = useState(null);
   const { currentUser } = useAuthContext();
   const { data } = useChatContext();
 
+  const [newNickname, setNewNickname] = useState(data.nickname);
+
   const settings = title === 'emoji' ? emojis : themes;
   const key = title === 'emoji' ? 'chatEmoji' : 'chatTheme';
   const options = Object.entries(settings).map((choice) => choice[0]);
 
+  //this is for radio button choices of emojis and theme
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'emojis',
     defaultValue: data.emoji,
@@ -33,8 +45,9 @@ const ModalSettings = ({ title, onClose }) => {
   });
 
   const group = getRootProps();
+  // end of radio button
 
-  const handleSave = async () => {
+  const handleSave = async (newNickname) => {
     const user = data.user;
 
     const combinedId =
@@ -43,17 +56,60 @@ const ModalSettings = ({ title, onClose }) => {
         : user.uid + currentUser.uid;
 
     try {
-      //create user chats
-      await updateDoc(doc(db, 'userChats', currentUser.uid), {
-        [combinedId + '.chatSettings' + `.${key}`]: value,
+      if (title === 'nickname') {
+        await updateDoc(doc(db, 'userChats', currentUser.uid), {
+          [combinedId + '.chatSettings' + '.nickname']: newNickname,
+        });
+
+        await updateDoc(doc(db, 'userChats', user.uid), {
+          [combinedId + '.chatSettings' + '.nickname']: newNickname,
+        });
+      }
+
+      if (title === 'emoji' || title === 'theme') {
+        //create user chats
+        await updateDoc(doc(db, 'userChats', currentUser.uid), {
+          [combinedId + '.chatSettings' + `.${key}`]: value,
+        });
+
+        await updateDoc(doc(db, 'userChats', user.uid), {
+          [combinedId + '.chatSettings' + `.${key}`]: value,
+        });
+      }
+
+      await updateDoc(doc(db, 'chats', data.chatId), {
+        messages: arrayUnion({
+          id: uuid(),
+          info: `${data.nickname[currentUser.displayName]} changed ${title}`,
+          senderId: currentUser.uid,
+          date: Timestamp.now(),
+        }),
       });
 
-      await updateDoc(doc(db, 'userChats', user.uid), {
-        [combinedId + '.chatSettings' + `.${key}`]: value,
+      await updateDoc(doc(db, 'userChats', currentUser.uid), {
+        [data.chatId + '.lastMessage']: {
+          info: `${data.nickname[currentUser.displayName]} changed ${title}`,
+        },
+        [data.chatId + '.date']: serverTimestamp(),
+      });
+
+      await updateDoc(doc(db, 'userChats', data.user.uid), {
+        [data.chatId + '.lastMessage']: {
+          info: `${data.nickname[currentUser.displayName]} changed ${title}`,
+        },
+        [data.chatId + '.date']: serverTimestamp(),
       });
     } catch (error) {
       console.log(error);
     }
+
+    onClose();
+  };
+
+  const handleChange = (e) => {
+    setNewNickname((prev) => {
+      return { ...prev, [e.target.id]: e.target.value };
+    });
   };
 
   return (
@@ -63,40 +119,59 @@ const ModalSettings = ({ title, onClose }) => {
         <ModalHeader textTransform='capitalize'>Change {title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Flex
-            flexWrap='wrap'
-            alignItems='center'
-            justifyContent='center'
-            gap={4}
-            {...group}
-          >
-            {options.map((value) => {
-              const radio = getRadioProps({ value });
+          {title !== 'nickname' ? (
+            <Flex
+              flexWrap='wrap'
+              alignItems='center'
+              justifyContent='center'
+              gap={4}
+              {...group}
+            >
+              {options.map((value) => {
+                const radio = getRadioProps({ value });
 
-              return (
-                <RadioCard
-                  key={value}
-                  {...radio}
-                  color={title === 'theme' && settings[value]}
-                >
-                  {title === 'emoji' ? settings[value].component : 'color'}
-                </RadioCard>
-              );
-            })}
-          </Flex>
+                return (
+                  <RadioCard
+                    key={value}
+                    {...radio}
+                    color={title === 'theme' && settings[value]}
+                  >
+                    {title === 'emoji' ? settings[value].component : 'color'}
+                  </RadioCard>
+                );
+              })}
+            </Flex>
+          ) : (
+            <>
+              <FormLabel textTransform='capitalize'>
+                {data.user.displayName}'s nickname
+              </FormLabel>
+              <Input
+                onChange={handleChange}
+                type='text'
+                id={data.user.displayName}
+                value={newNickname[data.user.displayName]}
+                placeholder={data.user.displayName}
+              />
+              <FormLabel textTransform='capitalize'>
+                {currentUser.displayName}'s nickname
+              </FormLabel>
+              <Input
+                onChange={handleChange}
+                type='text'
+                id={currentUser.displayName}
+                placeholder={currentUser.displayName}
+                value={newNickname[currentUser.displayName]}
+              />
+            </>
+          )}
         </ModalBody>
 
         <ModalFooter>
           <Button colorScheme='red' variant='ghost' mr={3} onClick={onClose}>
             Cancel
           </Button>
-          <Button
-            colorScheme='blue'
-            onClick={() => {
-              handleSave();
-              onClose();
-            }}
-          >
+          <Button colorScheme='blue' onClick={() => handleSave(newNickname)}>
             Save
           </Button>
         </ModalFooter>

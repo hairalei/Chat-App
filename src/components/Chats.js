@@ -69,10 +69,19 @@ const Chats = () => {
                   </Heading>
 
                   {/* message */}
-                  <Text as='p' fontSize='sm' color='gray.300' lineHeight='1.3'>
-                    {userFriend.lastMessage?.text.length > 50
+                  <Text
+                    as='p'
+                    fontSize='sm'
+                    color='gray.300'
+                    lineHeight='1.3'
+                    fontStyle={userFriend.lastMessage?.info && 'italic'}
+                  >
+                    {userFriend.lastMessage?.text &&
+                    userFriend.lastMessage?.text.length > 50
                       ? userFriend.lastMessage?.text.substring(0, 50) + ' ...'
                       : userFriend.lastMessage?.text}
+                    {userFriend.lastMessage?.info &&
+                      userFriend.lastMessage?.info}
                   </Text>
                 </Flex>
               </Flex>

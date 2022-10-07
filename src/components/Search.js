@@ -96,6 +96,10 @@ const Search = () => {
         [combinedId + '.chatSettings']: {
           chatEmoji: 'like',
           chatTheme: 'blue',
+          nickname: {
+            [currentUser.displayName]: currentUser.displayName,
+            [user.displayName]: user.displayName,
+          },
         },
       });
 
@@ -109,6 +113,10 @@ const Search = () => {
         [combinedId + '.chatSettings']: {
           chatEmoji: 'like',
           chatTheme: 'blue',
+          nickname: {
+            [currentUser.displayName]: currentUser.displayName,
+            [user.displayName]: user.displayName,
+          },
         },
       });
     } catch (error) {

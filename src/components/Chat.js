@@ -10,6 +10,11 @@ import {
   MenuItem,
   useDisclosure,
   Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
 } from '@chakra-ui/react';
 import React from 'react';
 import { IoPerson, IoEllipsisHorizontalSharp } from 'react-icons/io5';
@@ -17,9 +22,13 @@ import { useChatContext } from '../context/ChatContext';
 import { Messages, ChatInput } from './';
 import ModalButton from './ModalButton';
 import { themes } from '../utils/utils';
+import { useAuthContext } from '../context/AuthContext';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase.config';
 
 const Chat = () => {
   const { data } = useChatContext();
+  const { currentUser } = useAuthContext();
   const { dark, light } = themes[data.theme];
 
   return (
@@ -49,7 +58,7 @@ const Chat = () => {
           size={['md', 'lg']}
           fontWeight={{ base: 'normal', md: 'medium' }}
         >
-          {data.user?.displayName}
+          {data?.nickname[data.user.displayName] || data.user?.displayName}
         </Heading>
 
         {/* icon group */}
@@ -81,7 +90,9 @@ const Chat = () => {
                 }
               />
               <MenuList color='blue.900'>
-                <MenuItem>Change Nickname</MenuItem>
+                {/* <MenuItem>Change Nickname</MenuItem> */}
+
+                <ModalButton title='nickname' />
 
                 <ModalButton title='emoji' />
 

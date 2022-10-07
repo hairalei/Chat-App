@@ -36,7 +36,6 @@ const ChatInput = () => {
   const toast = useToast();
 
   const handleSend = async (emoji) => {
-    console.log('send');
     if (img) {
       const storageRef = ref(storage, uuid());
       const uploadTask = uploadBytesResumable(storageRef, img);

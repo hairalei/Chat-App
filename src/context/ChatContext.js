@@ -19,6 +19,7 @@ export const ChatContextProvider = ({ children }) => {
     user: {},
     emoji: 'like',
     theme: 'blue',
+    nickname: {},
   };
 
   const chatReducer = (state, action) => {
@@ -43,6 +44,12 @@ export const ChatContextProvider = ({ children }) => {
         return {
           ...state,
           theme: action.payload,
+        };
+
+      case 'CHANGE_NICKNAME':
+        return {
+          ...state,
+          nickname: action.payload,
         };
 
       case 'RESET_STATE':
@@ -72,6 +79,11 @@ export const ChatContextProvider = ({ children }) => {
         dispatch({
           type: 'CHANGE_THEME',
           payload: doc.data()[combinedId]['chatSettings']['chatTheme'],
+        });
+
+        dispatch({
+          type: 'CHANGE_NICKNAME',
+          payload: doc.data()[combinedId]['chatSettings']['nickname'],
         });
       });
 
