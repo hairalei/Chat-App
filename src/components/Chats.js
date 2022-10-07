@@ -4,6 +4,7 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import { useAuthContext } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
+import AvatarWithBadge from './AvatarWithBadge';
 
 const Chats = () => {
   const [chats, setChats] = useState('');
@@ -44,7 +45,7 @@ const Chats = () => {
           ?.sort((a, b) => b[1].date - a[1].date)
           .map((chat) => {
             const [chatID, userFriend] = chat;
-            const { displayName, photoURL, uid } = userFriend.userInfo;
+            const { displayName, photoURL, uid, email } = userFriend.userInfo;
 
             return (
               <Flex
@@ -56,7 +57,11 @@ const Chats = () => {
                 p={3}
               >
                 {/* profile pic */}
-                <Avatar name={displayName} src={photoURL} mr='2' />
+                <AvatarWithBadge
+                  email={email}
+                  name={displayName}
+                  src={photoURL}
+                />
                 <Flex direction='column' gap='1'>
                   {/* name */}
                   <Heading

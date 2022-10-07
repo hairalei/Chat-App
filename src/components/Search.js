@@ -21,6 +21,7 @@ import {
   doc,
   updateDoc,
   serverTimestamp,
+  arrayUnion,
 } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import { useAuthContext } from '../context/AuthContext';
@@ -120,6 +121,21 @@ const Search = () => {
             [user.displayName]: user.displayName,
           },
         },
+      });
+
+      // update friends list
+      await updateDoc(doc(db, 'users', currentUser.uid), {
+        friends: arrayUnion({
+          uid: user.uid,
+          email: user.email,
+        }),
+      });
+
+      await updateDoc(doc(db, 'users', user.uid), {
+        friends: arrayUnion({
+          uid: currentUser.uid,
+          email: currentUser.email,
+        }),
       });
     } catch (error) {
       console.log(error);

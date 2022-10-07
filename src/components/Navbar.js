@@ -11,6 +11,7 @@ import {
   Button,
   Image,
   useMediaQuery,
+  AvatarBadge,
 } from '@chakra-ui/react';
 import React from 'react';
 import logo from '../assets/LOGO.svg';
@@ -51,7 +52,9 @@ const Navbar = () => {
             rightIcon={<FaChevronCircleDown />}
           >
             <Flex alignItems='center' justifyContent='center'>
-              <Avatar name='user' src={photoURL} mr='2' />
+              <Avatar name='user' src={photoURL} mr='2'>
+                <AvatarBadge boxSize={3} bg='green.500' />
+              </Avatar>
               <Text as='span' display={['none', 'inline-block']}>
                 {displayName}
               </Text>

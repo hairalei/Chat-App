@@ -150,7 +150,6 @@ const ChatInput = () => {
 
         {/* button group  */}
         <Flex alignItems='center' justifyContent='center'>
-          {/* should be menu of emojis */}
           <IconButton
             variant='ghost'
             colorScheme='twitter'

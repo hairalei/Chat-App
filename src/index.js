@@ -5,15 +5,18 @@ import App from './App';
 import { ChakraProvider } from '@chakra-ui/react';
 import { AuthContextProvider } from './context/AuthContext';
 import { ChatContextProvider } from './context/ChatContext';
+import { UserStatusProvider } from './context/UserStatusContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <AuthContextProvider>
       <ChatContextProvider>
-        <ChakraProvider>
-          <App />
-        </ChakraProvider>
+        <UserStatusProvider>
+          <ChakraProvider>
+            <App />
+          </ChakraProvider>
+        </UserStatusProvider>
       </ChatContextProvider>
     </AuthContextProvider>
   </React.StrictMode>

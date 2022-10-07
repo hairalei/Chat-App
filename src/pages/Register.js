@@ -110,6 +110,10 @@ const Register = () => {
             await setDoc(doc(db, 'users', user.uid), formDataCopy);
 
             await setDoc(doc(db, 'userChats', user.uid), {});
+
+            await setDoc(doc(db, 'userStatus', user.uid), {
+              [email]: true,
+            });
           });
         }
       );
