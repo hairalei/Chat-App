@@ -25,11 +25,14 @@ import { themes } from '../utils/utils';
 import { useAuthContext } from '../context/AuthContext';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase.config';
+import Profile from './Profile';
 
 const Chat = () => {
   const { data } = useChatContext();
   const { currentUser } = useAuthContext();
   const { dark, light } = themes[data.theme];
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Flex
@@ -67,31 +70,32 @@ const Chat = () => {
             variant='ghost'
             size='md'
             color='white'
-            _hover={{ color: 'blue', background: 'white' }}
+            _hover={{ color: `${data.theme}`, background: 'white' }}
             aria-label='view-profile'
             icon={<Icon as={IoPerson} boxSize={[6, 7]} />}
+            onClick={onOpen}
           />
-
+          <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
+            <Profile onClose={onClose} />
+          </Modal>{' '}
           <Box>
             <Menu>
               <MenuButton
                 as={IconButton}
                 size='md'
-                colorScheme='blue'
+                colorScheme={data.theme}
                 variant='ghost'
-                aria-label='add-friend'
+                aria-label='friend user options'
                 icon={
                   <Icon
                     color='white'
-                    _hover={{ color: 'blue', background: 'white' }}
+                    _hover={{ color: `${data.theme}`, background: 'white' }}
                     as={IoEllipsisHorizontalSharp}
                     boxSize={[6, 7]}
                   />
                 }
               />
               <MenuList color='blue.900'>
-                {/* <MenuItem>Change Nickname</MenuItem> */}
-
                 <ModalButton title='nickname' />
 
                 <ModalButton title='emoji' />

@@ -20,6 +20,7 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../firebase.config';
 import { useAuthContext } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
+import ModalButton from './ModalButton';
 
 const Navbar = () => {
   const { currentUser } = useAuthContext();
@@ -57,8 +58,9 @@ const Navbar = () => {
             </Flex>
           </MenuButton>
           <MenuList color='blue.900'>
-            <MenuItem>Profile</MenuItem>
+            <ModalButton owner />
             <MenuItem
+              color='red.500'
               onClick={() => {
                 signOut(auth);
                 dispatch({ type: 'RESET_STATE' });

@@ -91,6 +91,7 @@ const Search = () => {
           uid: user.uid,
           displayName: user.displayName,
           photoURL: user.photoURL,
+          email: user.email,
         },
         [combinedId + '.date']: serverTimestamp(),
         [combinedId + '.chatSettings']: {
@@ -108,6 +109,7 @@ const Search = () => {
           uid: currentUser.uid,
           displayName: currentUser.displayName,
           photoURL: currentUser.photoURL,
+          email: currentUser.email,
         },
         [combinedId + '.date']: serverTimestamp(),
         [combinedId + '.chatSettings']: {
