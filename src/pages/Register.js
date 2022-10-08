@@ -34,6 +34,7 @@ const Register = () => {
         return { ...prev, file: e.target.files[0] };
       });
     }
+    console.log(displayName.length);
   };
 
   const handleSubmit = async (e) => {
@@ -49,6 +50,12 @@ const Register = () => {
     if (password !== confirmPassword) {
       setIsLoading(false);
       setError('Passwords do not match');
+      return;
+    }
+
+    if (displayName.length > 25) {
+      setIsLoading(false);
+      setError('Display Name should be less than 25 characters');
       return;
     }
 

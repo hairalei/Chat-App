@@ -6,7 +6,7 @@ import { useAuthContext } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
 import AvatarWithBadge from './AvatarWithBadge';
 
-const Chats = () => {
+const Chats = ({ color }) => {
   const [chats, setChats] = useState('');
   const { currentUser } = useAuthContext();
   const { dispatch, data } = useChatContext();
@@ -50,7 +50,7 @@ const Chats = () => {
                 alignItems='center'
                 cursor='pointer'
                 key={chatID}
-                backgroundColor={data.user.uid === uid && 'blue.800'}
+                backgroundColor={data.user.uid === uid && `${color}.800`}
                 onClick={() => handleSelect(userFriend.userInfo)}
                 p={3}
               >

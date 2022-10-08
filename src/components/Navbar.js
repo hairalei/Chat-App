@@ -25,7 +25,7 @@ import ModalButton from './ModalButton';
 import { doc, setDoc } from 'firebase/firestore';
 import { useUserStatusContext } from '../context/UserStatusContext';
 
-const Navbar = () => {
+const Navbar = ({ color }) => {
   const { currentUser } = useAuthContext();
   const { displayName, photoURL, email, uid } = currentUser;
   const { dispatch } = useChatContext();
@@ -46,11 +46,12 @@ const Navbar = () => {
   return (
     <Flex
       as='nav'
-      backgroundColor='blue.900'
-      h='20'
+      backgroundColor={`${color}.900`}
+      h={20}
       p='2'
-      px={3}
+      px={[4, 6]}
       alignItems='center'
+      maxW='100%'
     >
       {isLargerThan1400 && <Image src={logoWithName} alt='logo' width={44} />}
       {!isLargerThan1400 && (
@@ -66,12 +67,19 @@ const Navbar = () => {
             rightIcon={<FaChevronCircleDown />}
           >
             <Flex alignItems='center' justifyContent='center'>
-              <Avatar name='user' src={photoURL} mr='2'>
+              <Avatar name='user' src={photoURL} mr={3}>
                 <AvatarBadge boxSize={3} bg='green.500' border='1px' />
               </Avatar>
-              <Text as='span' display={['none', 'inline-block']}>
-                {displayName}
-              </Text>
+              <Box overflowWrap='break-word'>
+                <Text
+                  as='span'
+                  display={['none', 'none', 'inline-block']}
+                  wordBreak='break-word'
+                  textTransform='capitalize'
+                >
+                  {displayName.split(' ')[0]}
+                </Text>
+              </Box>
             </Flex>
           </MenuButton>
           <MenuList color='blue.900'>

@@ -19,7 +19,11 @@ import {
   Avatar,
 } from '@chakra-ui/react';
 import React from 'react';
-import { IoPerson, IoEllipsisHorizontalSharp } from 'react-icons/io5';
+import {
+  IoPerson,
+  IoEllipsisHorizontalSharp,
+  IoArrowBackOutline,
+} from 'react-icons/io5';
 import { useChatContext } from '../context/ChatContext';
 import { Messages, ChatInput } from './';
 import ModalButton from './ModalButton';
@@ -30,6 +34,7 @@ import { db } from '../firebase.config';
 import Profile from './Profile';
 import AvatarWithBadge from './AvatarWithBadge';
 import { useUserStatusContext } from '../context/UserStatusContext';
+import ProfileButton from './ProfileButton';
 
 const Chat = () => {
   const { data } = useChatContext();
@@ -63,6 +68,14 @@ const Chat = () => {
         {/* user name */}
         {userFriends && userFriends.length > 0 && (
           <Flex gap={2}>
+            <IconButton
+              variant='ghost'
+              size='md'
+              color='white'
+              _hover={{ color: `${data.theme}`, background: 'white' }}
+              aria-label='back-to-chats'
+              icon={<Icon as={IoArrowBackOutline} boxSize={[6, 7]} />}
+            />
             <AvatarWithBadge src={data.user.photoURL} email={data.user.email} />
             <Heading
               as='h1'
@@ -77,18 +90,7 @@ const Chat = () => {
         {/* icon group */}
         {userFriends && userFriends.length > 0 && (
           <Flex alignItems='center' gap={2}>
-            <IconButton
-              variant='ghost'
-              size='md'
-              color='white'
-              _hover={{ color: `${data.theme}`, background: 'white' }}
-              aria-label='view-profile'
-              icon={<Icon as={IoPerson} boxSize={[6, 7]} />}
-              onClick={onOpen}
-            />
-            <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
-              <Profile onClose={onClose} />
-            </Modal>{' '}
+            <ProfileButton />
             <Box>
               <Menu>
                 <MenuButton

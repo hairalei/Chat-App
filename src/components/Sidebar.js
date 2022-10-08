@@ -10,15 +10,16 @@ const Sidebar = () => {
   return (
     <Box
       as='section'
-      flex='1'
+      flex='1.2'
       backgroundColor={`${color}.700`}
       color='white'
       overflowY='auto'
-      overflowWrap='break-word'
+      // maxW='100%'
+      // overflowX='hidden'
     >
-      <Navbar />
+      <Navbar color={color} />
       <Search />
-      <Chats />
+      <Chats color={color} />
     </Box>
   );
 };
