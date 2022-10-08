@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@chakra-ui/react';
-import { Navbar, Search, Chats } from './';
+import { Navbar, Search, Chats, Friends } from './';
 
 const Sidebar = () => {
   return (

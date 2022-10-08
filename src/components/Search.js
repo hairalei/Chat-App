@@ -25,11 +25,13 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import { useAuthContext } from '../context/AuthContext';
+import Friends from './Friends';
+import { async } from '@firebase/util';
 
 const Search = () => {
   const [username, setUsername] = useState('');
   const [results, setResults] = useState([]);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hide, setHide] = useState(false);
   const { currentUser } = useAuthContext();
@@ -55,23 +57,38 @@ const Search = () => {
 
     try {
       const querySnapshot = await getDocs(q);
+      console.log(querySnapshot.docs.length);
 
-      querySnapshot.forEach(async (doc) => {
+      if (querySnapshot.docs.length === 0) {
+        setError('User does not exists');
+      }
+
+      querySnapshot.forEach((doc) => {
         setResults((prev) => {
           return [...prev, doc.data()];
         });
       });
+
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
       setIsLoading(false);
       setError('Sorry, user not found.');
     }
-
-    setIsLoading(false);
   };
 
   const handleSelect = async (user) => {
     // checks if chats in firestore exists, if not create
+    if (user.uid === currentUser.uid) {
+      toast({
+        title: `You can't add yourself! That's just sad...`,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     const combinedId =
       currentUser.uid > user.uid
         ? currentUser.uid + user.uid
@@ -128,6 +145,8 @@ const Search = () => {
         friends: arrayUnion({
           uid: user.uid,
           email: user.email,
+          photoURL: user.photoURL,
+          displayName: user.displayName,
         }),
       });
 
@@ -135,7 +154,16 @@ const Search = () => {
         friends: arrayUnion({
           uid: currentUser.uid,
           email: currentUser.email,
+          photoURL: currentUser.photoURL,
+          displayName: currentUser.displayName,
         }),
+      });
+
+      toast({
+        title: 'Added as friend',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
       });
     } catch (error) {
       console.log(error);
@@ -147,7 +175,7 @@ const Search = () => {
   };
 
   return (
-    <div>
+    <>
       <Input
         variant='flushed'
         type='text'
@@ -178,6 +206,7 @@ const Search = () => {
             key={idx}
             as='section'
             gap='3'
+            mb={4}
             direction='column'
             px='2'
             borderBottom='1px'
@@ -186,49 +215,33 @@ const Search = () => {
             display={hide ? 'none' : 'block'}
             onClick={() => {
               handleSelect(result);
-
-              toast({
-                title: 'Added as friend',
-                status: 'success',
-                duration: 3000,
-                isClosable: true,
-              });
             }}
             cursor='pointer'
           >
-            {!isLoading ? (
+            {!isLoading && !error && (
               <Flex alignItems='center'>
                 <Avatar name={displayName} src={photoURL} mr='2' />
                 <Text as='span'>{displayName}</Text>
               </Flex>
-            ) : (
-              <Text
-                as='p'
-                px='2'
-                pb='3'
-                fontSize='md'
-                color='red.300'
-                opacity={isLoading ? 0 : 1}
-              >
-                User does not exists
-              </Text>
-            )}
-            {error && (
-              <Text
-                as='p'
-                px='2'
-                pb='3'
-                fontSize='md'
-                color='red.300'
-                opacity={isLoading ? 0 : 1}
-              >
-                {error}
-              </Text>
             )}
           </Flex>
         );
       })}
-    </div>
+      {error && (
+        <Text
+          as='p'
+          px='2'
+          pb='3'
+          fontSize='md'
+          color='red.300'
+          opacity={isLoading ? 0 : 1}
+        >
+          {error}
+        </Text>
+      )}
+
+      <Friends handleSelect={handleSelect} />
+    </>
   );
 };
 

@@ -39,7 +39,7 @@ export const UserStatusProvider = ({ children }) => {
   }, [isDocrefExists]);
 
   useEffect(() => {
-    if (userFriends.length > 0) {
+    if (userFriends && userFriends.length > 0) {
       userFriends.forEach((friend) => {
         const unsub = onSnapshot(doc(db, 'userStatus', friend.uid), (doc) => {
           setOnlineFriends((prev) => {

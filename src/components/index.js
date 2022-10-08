@@ -5,5 +5,6 @@ import Chat from './Chat';
 import Search from './Search';
 import Chats from './Chats';
 import ChatInput from './ChatInput';
+import Friends from './Friends';
 
-export { Navbar, Sidebar, Messages, Chat, Search, Chats, ChatInput };
+export { Navbar, Sidebar, Messages, Chat, Search, Chats, ChatInput, Friends };

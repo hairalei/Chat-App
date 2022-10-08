@@ -63,7 +63,7 @@ const Chat = () => {
         justifyContent='space-between'
       >
         {/* user name */}
-        {userFriends.length > 0 && (
+        {userFriends && userFriends.length > 0 && (
           <Flex gap={2}>
             <AvatarWithBadge src={data.user.photoURL} email={data.user.email} />
             <Heading
@@ -77,7 +77,7 @@ const Chat = () => {
         )}
 
         {/* icon group */}
-        {userFriends.length > 0 && (
+        {userFriends && userFriends.length > 0 && (
           <Flex alignItems='center' gap={2}>
             <IconButton
               variant='ghost'
@@ -126,7 +126,7 @@ const Chat = () => {
       {/* ========== message box ==========  */}
       <Box overflowY='auto' h='100%' mb={20}>
         <Messages />
-        {userFriends.length > 0 && <ChatInput />}
+        {userFriends && userFriends.length > 0 && <ChatInput />}
       </Box>
     </Flex>
   );

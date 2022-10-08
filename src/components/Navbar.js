@@ -53,7 +53,7 @@ const Navbar = () => {
           >
             <Flex alignItems='center' justifyContent='center'>
               <Avatar name='user' src={photoURL} mr='2'>
-                <AvatarBadge boxSize={3} bg='green.500' />
+                <AvatarBadge boxSize={3} bg='green.500' border='1px' />
               </Avatar>
               <Text as='span' display={['none', 'inline-block']}>
                 {displayName}
