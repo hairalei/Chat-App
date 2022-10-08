@@ -18,16 +18,26 @@ import logo from '../assets/LOGO.svg';
 import logoWithName from '../assets/LogoWithName.svg';
 import { FaChevronCircleDown } from 'react-icons/fa';
 import { signOut } from 'firebase/auth';
-import { auth } from '../firebase.config';
+import { auth, db } from '../firebase.config';
 import { useAuthContext } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
 import ModalButton from './ModalButton';
+import { doc, setDoc } from 'firebase/firestore';
 
 const Navbar = () => {
   const { currentUser } = useAuthContext();
-  const { displayName, photoURL } = currentUser;
+  const { displayName, photoURL, email, uid } = currentUser;
   const { dispatch } = useChatContext();
   const [isLargerThan1400] = useMediaQuery('(min-width: 1400px)');
+
+  const handleLogOut = async () => {
+    await setDoc(doc(db, 'userStatus', uid), {
+      [email]: false,
+    });
+
+    signOut(auth);
+    dispatch({ type: 'RESET_STATE' });
+  };
 
   return (
     <Flex
