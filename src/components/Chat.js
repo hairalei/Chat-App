@@ -66,7 +66,7 @@ const Chat = () => {
         justifyContent='space-between'
       >
         {/* user name */}
-        {userFriends && userFriends.length > 0 && (
+        {userFriends && data.chatId && (
           <Flex gap={2}>
             <IconButton
               variant='ghost'
@@ -88,7 +88,7 @@ const Chat = () => {
         )}
 
         {/* icon group */}
-        {userFriends && userFriends.length > 0 && (
+        {userFriends && data.chatId && (
           <Flex alignItems='center' gap={2}>
             <ProfileButton />
             <Box>
@@ -126,7 +126,7 @@ const Chat = () => {
       {/* ========== message box ==========  */}
       <Box overflowY='auto' h='100%' mb={20}>
         <Messages />
-        {userFriends && userFriends.length > 0 && <ChatInput />}
+        {userFriends && data.chatId && <ChatInput />}
       </Box>
     </Flex>
   );

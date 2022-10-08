@@ -8,20 +8,14 @@ import Message from './Message';
 
 const Messages = () => {
   const [messages, setMessages] = useState([]);
-  const { data, dispatch } = useChatContext();
+  const { data, resetChat } = useChatContext();
 
   const bottomRef = useRef(null);
 
   // reset data payload when new user logs in
-  useEffect(() => {
-    dispatch({
-      type: 'CHANGE_USER',
-      payload: {
-        chatId: 'null',
-        user: {},
-      },
-    });
-  }, []);
+  // useEffect(() => {
+  //   resetChat();
+  // }, []);
 
   useEffect(() => {
     // 👇️ scroll to bottom every time messages change

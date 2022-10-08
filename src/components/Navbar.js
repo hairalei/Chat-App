@@ -28,7 +28,7 @@ import { useUserStatusContext } from '../context/UserStatusContext';
 const Navbar = ({ color }) => {
   const { currentUser } = useAuthContext();
   const { displayName, photoURL, email, uid } = currentUser;
-  const { dispatch } = useChatContext();
+  const { dispatch, resetChat } = useChatContext();
   const { resetStatus } = useUserStatusContext();
   const [isLargerThan1400] = useMediaQuery('(min-width: 1400px)');
 
@@ -38,6 +38,7 @@ const Navbar = ({ color }) => {
     });
 
     resetStatus();
+    resetChat();
     dispatch({ type: 'RESET_STATE' });
     console.log('out');
     signOut(auth);

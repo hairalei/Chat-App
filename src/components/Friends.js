@@ -8,6 +8,7 @@ const Friends = () => {
   return (
     <AvatarGroup size='md' max={4} px={4} mb={4}>
       {userFriends &&
+        userFriends.length > 0 &&
         userFriends.map((friend) => {
           const { email, photoURL, uid } = friend;
           return (

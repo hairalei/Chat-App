@@ -12,7 +12,7 @@ import { useAuthContext } from './AuthContext';
 const UserStatusContext = createContext();
 
 const INITIAL_STATE = {
-  userFriends: [],
+  userFriends: null,
   onlineFriends: [],
   isDocrefExists: false,
 };
@@ -42,6 +42,10 @@ export const UserStatusProvider = ({ children }) => {
   const resetStatus = () => {
     dispatch({ type: 'RESET_STATUS' });
     setData([]);
+  };
+
+  const setUserFriends = (user) => {
+    dispatch({ type: 'SET_USER_FRIENDS', payload: user });
   };
 
   useEffect(() => {
@@ -94,7 +98,9 @@ export const UserStatusProvider = ({ children }) => {
   }, [userFriends]);
 
   return (
-    <UserStatusContext.Provider value={{ ...state, resetStatus }}>
+    <UserStatusContext.Provider
+      value={{ ...state, resetStatus, setUserFriends }}
+    >
       {children}
     </UserStatusContext.Provider>
   );

@@ -15,11 +15,21 @@ const ChatContext = createContext();
 export const ChatContextProvider = ({ children }) => {
   const { currentUser } = useAuthContext();
   const INITIAL_STATE = {
-    chatId: 'null',
+    chatId: null,
     user: {},
     emoji: 'like',
     theme: 'blue',
     nickname: {},
+  };
+
+  const resetChat = () => {
+    dispatch({
+      type: 'RESET_STATE',
+    });
+  };
+
+  const changeUser = (user) => {
+    dispatch({ type: 'CHANGE_USER', payload: user });
   };
 
   const chatReducer = (state, action) => {
@@ -64,7 +74,7 @@ export const ChatContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE);
 
   useEffect(() => {
-    if (state.user.uid) {
+    if (state.user.uid && currentUser.uid) {
       const combinedId =
         currentUser.uid > state.user.uid
           ? currentUser.uid + state.user.uid
@@ -92,7 +102,9 @@ export const ChatContextProvider = ({ children }) => {
   }, [state.user]);
 
   return (
-    <ChatContext.Provider value={{ data: state, dispatch }}>
+    <ChatContext.Provider
+      value={{ data: state, dispatch, resetChat, changeUser }}
+    >
       {children}
     </ChatContext.Provider>
   );

@@ -27,6 +27,8 @@ import { db } from '../firebase.config';
 import { useAuthContext } from '../context/AuthContext';
 import Friends from './Friends';
 import { async } from '@firebase/util';
+import { useUserStatusContext } from '../context/UserStatusContext';
+import { useChatContext } from '../context/ChatContext';
 
 const Search = () => {
   const [username, setUsername] = useState('');
@@ -35,6 +37,8 @@ const Search = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hide, setHide] = useState(false);
   const { currentUser } = useAuthContext();
+  const { setUserFriends } = useUserStatusContext();
+  const { changeUser } = useChatContext();
 
   const toast = useToast();
 
@@ -89,6 +93,8 @@ const Search = () => {
       return;
     }
 
+    changeUser(user);
+
     const combinedId =
       currentUser.uid > user.uid
         ? currentUser.uid + user.uid
@@ -103,6 +109,7 @@ const Search = () => {
           messages: [],
         });
       }
+
       //create user chats
       await updateDoc(doc(db, 'userChats', currentUser.uid), {
         [combinedId + '.userInfo']: {
@@ -165,6 +172,8 @@ const Search = () => {
         duration: 3000,
         isClosable: true,
       });
+
+      setUserFriends(user);
     } catch (error) {
       console.log(error);
       setError('Something went wrong. Try again.');
