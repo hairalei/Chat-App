@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import Form from '../components/Form';
-import { auth } from '../firebase.config';
+import { auth, db } from '../firebase.config';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { doc, setDoc } from 'firebase/firestore';
 
 const Login = () => {
   const [error, setError] = useState(null);
@@ -24,7 +25,11 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const res = await signInWithEmailAndPassword(auth, email, password);
+
+      await setDoc(doc(db, 'userStatus', res.user.uid), {
+        [email]: true,
+      });
 
       setIsLoading(false);
       setError(null);

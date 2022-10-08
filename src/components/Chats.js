@@ -8,9 +8,8 @@ import AvatarWithBadge from './AvatarWithBadge';
 
 const Chats = () => {
   const [chats, setChats] = useState('');
-  const [active, setActive] = useState(null);
   const { currentUser } = useAuthContext();
-  const { dispatch } = useChatContext();
+  const { dispatch, data } = useChatContext();
 
   useEffect(() => {
     const getChats = () => {
@@ -35,7 +34,6 @@ const Chats = () => {
 
   const handleSelect = (userInfo) => {
     dispatch({ type: 'CHANGE_USER', payload: userInfo });
-    setActive(userInfo.uid);
   };
 
   return (
@@ -52,7 +50,7 @@ const Chats = () => {
                 alignItems='center'
                 cursor='pointer'
                 key={chatID}
-                backgroundColor={active === uid && 'blue.800'}
+                backgroundColor={data.user.uid === uid && 'blue.800'}
                 onClick={() => handleSelect(userFriend.userInfo)}
                 p={3}
               >

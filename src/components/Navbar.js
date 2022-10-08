@@ -23,20 +23,24 @@ import { useAuthContext } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
 import ModalButton from './ModalButton';
 import { doc, setDoc } from 'firebase/firestore';
+import { useUserStatusContext } from '../context/UserStatusContext';
 
 const Navbar = () => {
   const { currentUser } = useAuthContext();
   const { displayName, photoURL, email, uid } = currentUser;
   const { dispatch } = useChatContext();
+  const { resetStatus } = useUserStatusContext();
   const [isLargerThan1400] = useMediaQuery('(min-width: 1400px)');
 
-  const handleLogOut = async () => {
-    await setDoc(doc(db, 'userStatus', uid), {
+  const handleLogOut = () => {
+    setDoc(doc(db, 'userStatus', uid), {
       [email]: false,
     });
 
-    signOut(auth);
+    resetStatus();
     dispatch({ type: 'RESET_STATE' });
+    console.log('out');
+    signOut(auth);
   };
 
   return (
@@ -72,13 +76,7 @@ const Navbar = () => {
           </MenuButton>
           <MenuList color='blue.900'>
             <ModalButton owner />
-            <MenuItem
-              color='red.500'
-              onClick={() => {
-                signOut(auth);
-                dispatch({ type: 'RESET_STATE' });
-              }}
-            >
+            <MenuItem color='red.500' onClick={handleLogOut}>
               Logout
             </MenuItem>
           </MenuList>

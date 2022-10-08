@@ -39,8 +39,6 @@ const Chat = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // if (userFriends.length < 1) return;
-
   return (
     <Flex
       as='section'
