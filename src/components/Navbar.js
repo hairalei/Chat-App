@@ -77,7 +77,7 @@ const Navbar = ({ color }) => {
                   wordBreak='break-word'
                   textTransform='capitalize'
                 >
-                  {displayName.split(' ')[0]}
+                  {displayName && displayName.split(' ')[0]}
                 </Text>
               </Box>
             </Flex>

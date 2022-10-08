@@ -187,6 +187,7 @@ const Search = () => {
         onChange={(e) => {
           setUsername(e.target.value);
           setHide(true);
+          setError(null);
         }}
         onKeyDown={handleSearch}
         value={username}

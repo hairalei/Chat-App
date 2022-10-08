@@ -14,8 +14,7 @@ const Sidebar = () => {
       backgroundColor={`${color}.700`}
       color='white'
       overflowY='auto'
-      // maxW='100%'
-      // overflowX='hidden'
+      overflowX='hidden'
     >
       <Navbar color={color} />
       <Search />

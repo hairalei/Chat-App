@@ -41,6 +41,7 @@ export const UserStatusProvider = ({ children }) => {
 
   const resetStatus = () => {
     dispatch({ type: 'RESET_STATUS' });
+    setData([]);
   };
 
   useEffect(() => {
