@@ -17,7 +17,7 @@ import AvatarWithBadge from './AvatarWithBadge';
 import { async } from '@firebase/util';
 import { useUserStatusContext } from '../context/UserStatusContext';
 
-const Chats = ({ color }) => {
+const Chats = ({ color, onOpen, isOnMobile }) => {
   const [chats, setChats] = useState('');
   // const [isLoading, setIsLoading] = useState(false);
   const { currentUser } = useAuthContext();
@@ -89,7 +89,10 @@ const Chats = ({ color }) => {
               cursor='pointer'
               key={chatID}
               backgroundColor={data.user.uid === uid && `${color}.800`}
-              onClick={() => handleSelect(userFriend.userInfo)}
+              onClick={() => {
+                handleSelect(userFriend.userInfo);
+                isOnMobile && onOpen();
+              }}
               p={3}
             >
               {/* profile pic */}

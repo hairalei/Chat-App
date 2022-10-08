@@ -25,7 +25,7 @@ import ModalButton from './ModalButton';
 import { doc, setDoc } from 'firebase/firestore';
 import { useUserStatusContext } from '../context/UserStatusContext';
 
-const Navbar = ({ color }) => {
+const Navbar = ({ color, isOnMobile }) => {
   const { currentUser } = useAuthContext();
   const { displayName, photoURL, email, uid } = currentUser;
   const { dispatch, resetChat } = useChatContext();
@@ -54,10 +54,14 @@ const Navbar = ({ color }) => {
       alignItems='center'
       maxW='100%'
     >
-      {isLargerThan1400 && <Image src={logoWithName} alt='logo' width={44} />}
-      {!isLargerThan1400 && (
+      {isLargerThan1400 || isOnMobile ? (
+        <Image src={logoWithName} alt='logo' width={[32, 36, 44]} />
+      ) : (
         <Image src={logo} alt='logo' width={42} height={42} />
       )}
+      {/* {!isLargerThan1400 && (
+        <Image src={logo} alt='logo' width={42} height={42} />
+      )} */}
 
       <Flex alignItems='center' justifyContent='center' ml='auto'>
         <Menu>

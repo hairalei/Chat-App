@@ -3,9 +3,9 @@ import { Box } from '@chakra-ui/react';
 import { Navbar, Search, Chats, Friends } from './';
 import { useChatContext } from '../context/ChatContext';
 
-const Sidebar = () => {
+const Sidebar = ({ onOpen, isOnMobile }) => {
   const { data } = useChatContext();
-  const color = data.theme;
+  const color = isOnMobile ? 'blue' : data.theme;
 
   return (
     <Box
@@ -16,9 +16,9 @@ const Sidebar = () => {
       overflowY='auto'
       overflowX='hidden'
     >
-      <Navbar color={color} />
+      <Navbar color={color} isOnMobile={isOnMobile} />
       <Search />
-      <Chats color={color} />
+      <Chats onOpen={onOpen} color={color} isOnMobile={isOnMobile} />
     </Box>
   );
 };

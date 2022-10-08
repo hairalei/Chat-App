@@ -18,7 +18,7 @@ import {
   calc,
   Avatar,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   IoPerson,
   IoEllipsisHorizontalSharp,
@@ -36,18 +36,24 @@ import AvatarWithBadge from './AvatarWithBadge';
 import { useUserStatusContext } from '../context/UserStatusContext';
 import ProfileButton from './ProfileButton';
 
-const Chat = () => {
+const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
   const { data } = useChatContext();
   const { currentUser } = useAuthContext();
   const { userFriends } = useUserStatusContext();
   const { dark, light } = themes[data.theme];
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [fullscreen, setFullscreen] = useState(false);
+
+  // const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleFullscreen = () => {
+    setFullscreen(!fullscreen);
+  };
 
   return (
     <Flex
       as='section'
-      flex='2'
+      flex={fullscreen ? '100%' : 2}
       backgroundColor={light}
       direction='column'
       position='relative'
@@ -69,6 +75,7 @@ const Chat = () => {
         {userFriends && data.chatId && (
           <Flex gap={2}>
             <IconButton
+              onClick={isOnMobile ? onClose : handleFullscreen}
               variant='ghost'
               size='md'
               color='white'
