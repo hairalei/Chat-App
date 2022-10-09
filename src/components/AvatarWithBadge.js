@@ -3,12 +3,12 @@ import React, { useEffect } from 'react';
 import { useChatContext } from '../context/ChatContext';
 import { useUserStatusContext } from '../context/UserStatusContext';
 
-const AvatarWithBadge = ({ src, email, friends, user }) => {
+const AvatarWithBadge = ({ src, email, friends, user, displayName }) => {
   const { onlineFriends } = useUserStatusContext();
   const { dispatch } = useChatContext();
 
   return (
-    <Avatar
+    <Avatar name={displayName}
       cursor='pointer'
       src={src}
       mr='2'

@@ -83,7 +83,11 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
               aria-label='back-to-chats'
               icon={<Icon as={IoArrowBackOutline} boxSize={[6, 7]} />}
             />
-            <AvatarWithBadge src={data.user.photoURL} email={data.user.email} />
+            <AvatarWithBadge
+              displayName={data.user.displayName}
+              src={data.user.photoURL}
+              email={data.user.email}
+            />
             <Heading
               as='h1'
               size={['md', 'lg']}

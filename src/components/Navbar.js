@@ -69,9 +69,6 @@ const Navbar = ({ color, isOnMobile }) => {
       ) : (
         <Image src={logo} alt='logo' width={42} height={42} />
       )}
-      {/* {!isLargerThan1400 && (
-        <Image src={logo} alt='logo' width={42} height={42} />
-      )} */}
 
       <Flex alignItems='center' justifyContent='center' ml='auto'>
         <Menu>
@@ -82,7 +79,7 @@ const Navbar = ({ color, isOnMobile }) => {
             rightIcon={<FaChevronCircleDown />}
           >
             <Flex alignItems='center' justifyContent='center'>
-              <Avatar name='user' src={photoURL} mr={3}>
+              <Avatar name={displayName} src={photoURL} mr={3}>
                 <AvatarBadge boxSize={3} bg='green.500' border='1px' />
               </Avatar>
               <Box overflowWrap='break-word'>

@@ -18,7 +18,6 @@ import { useUserStatusContext } from '../context/UserStatusContext';
 
 const Chats = ({ color, onOpen, isOnMobile }) => {
   const [chats, setChats] = useState('');
-  // const [isLoading, setIsLoading] = useState(false);
   const { currentUser } = useAuthContext();
   const { dispatch, data } = useChatContext();
   const { userFriends } = useUserStatusContext();
@@ -42,24 +41,9 @@ const Chats = ({ color, onOpen, isOnMobile }) => {
 
       return () => unsub();
     };
-    // console.log(chats);
+
     currentUser.uid && userFriends?.length > 0 && getChats();
   }, [currentUser.uid, userFriends]);
-
-  // useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     setIsLoading(false);
-  //   }, 5000);
-
-  //   console.log('chat');
-
-  //   return () => clearTimeout(timeout);
-  // }, [chats]);
-
-  // useEffect(() => {
-  //   console.log('chats');
-  //   chats.map((chat) => console.log(chat[1].lastMessage));
-  // }, [chats]);
 
   //automatically select the latest chat when page loads
   useEffect(() => {
@@ -79,10 +63,6 @@ const Chats = ({ color, onOpen, isOnMobile }) => {
 
     if (currentUser.uid) {
       getChats();
-      // const timeout = setTimeout(() => {
-      // }, 2000);
-
-      // return () => clearTimeout(timeout);
     }
   }, [currentUser.uid, userFriends]);
 
@@ -111,6 +91,7 @@ const Chats = ({ color, onOpen, isOnMobile }) => {
             >
               {/* profile pic */}
               <AvatarWithBadge
+                displayName={displayName}
                 email={email}
                 name={displayName}
                 src={photoURL}

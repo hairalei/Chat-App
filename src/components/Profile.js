@@ -35,6 +35,7 @@ const Profile = ({ onClose, owner }) => {
         <ModalBody>
           <Center>
             <Avatar
+              name={owner ? currentUser.displayName : data.user.displayName}
               size='xl'
               mb={6}
               mt={-12}

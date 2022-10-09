@@ -50,11 +50,9 @@ export const UserStatusProvider = ({ children }) => {
     setOnline({});
     setTemp([]);
     dispatch({ type: 'RESET_STATUS' });
-    // setData([]);
   };
 
   const setUserFriends = (user) => {
-    console.log(user);
     dispatch({ type: 'SET_USER_FRIENDS', payload: user });
   };
 
@@ -78,7 +76,6 @@ export const UserStatusProvider = ({ children }) => {
   useEffect(() => {
     if (isDocrefExists && currentUser) {
       const unsub = onSnapshot(doc(db, 'users', currentUser.uid), (doc) => {
-        // setData(doc.data().friends);
         const isEmpty = doc.data() && Object.keys(doc?.data())?.length === 0;
 
         !isEmpty && setTemp(doc.data()?.friends);
@@ -102,8 +99,6 @@ export const UserStatusProvider = ({ children }) => {
             return { ...prev, ...doc.data() };
           });
         });
-
-        console.log(online);
 
         return () => unsub();
       });
