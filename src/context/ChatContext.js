@@ -81,24 +81,22 @@ export const ChatContextProvider = ({ children }) => {
           : state.user.uid + currentUser.uid;
 
       const unsub = onSnapshot(doc(db, 'userChats', state.user.uid), (doc) => {
-        const isEmpty = Object.keys(doc?.data())?.length === 0;
+        if (!doc.data()[combinedId]) return;
 
-        if (combinedId && !isEmpty) {
-          dispatch({
-            type: 'CHANGE_EMOJI',
-            payload: doc?.data()[combinedId]['chatSettings']['chatEmoji'],
-          });
+        dispatch({
+          type: 'CHANGE_EMOJI',
+          payload: doc?.data()[combinedId]['chatSettings']['chatEmoji'],
+        });
 
-          dispatch({
-            type: 'CHANGE_THEME',
-            payload: doc?.data()[combinedId]['chatSettings']['chatTheme'],
-          });
+        dispatch({
+          type: 'CHANGE_THEME',
+          payload: doc?.data()[combinedId]['chatSettings']['chatTheme'],
+        });
 
-          dispatch({
-            type: 'CHANGE_NICKNAME',
-            payload: doc?.data()[combinedId]['chatSettings']['nickname'],
-          });
-        }
+        dispatch({
+          type: 'CHANGE_NICKNAME',
+          payload: doc?.data()[combinedId]['chatSettings']['nickname'],
+        });
       });
 
       return () => unsub();

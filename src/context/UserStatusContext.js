@@ -38,7 +38,7 @@ const reducer = (state, action) => {
 };
 
 export const UserStatusProvider = ({ children }) => {
-  // const [data, setData] = useState([]);
+  const [temp, setTemp] = useState([]);
   const [online, setOnline] = useState({});
   const { currentUser } = useAuthContext();
   const { data } = useChatContext();
@@ -48,11 +48,13 @@ export const UserStatusProvider = ({ children }) => {
 
   const resetStatus = () => {
     setOnline({});
+    setTemp([]);
     dispatch({ type: 'RESET_STATUS' });
     // setData([]);
   };
 
   const setUserFriends = (user) => {
+    console.log(user);
     dispatch({ type: 'SET_USER_FRIENDS', payload: user });
   };
 
@@ -77,14 +79,20 @@ export const UserStatusProvider = ({ children }) => {
     if (isDocrefExists && currentUser) {
       const unsub = onSnapshot(doc(db, 'users', currentUser.uid), (doc) => {
         // setData(doc.data().friends);
-        const isEmpty = Object.keys(doc?.data())?.length === 0;
+        const isEmpty = doc.data() && Object.keys(doc?.data())?.length === 0;
 
-        !isEmpty && setUserFriends(doc.data().friends);
+        !isEmpty && setTemp(doc.data()?.friends);
       });
 
       return () => unsub();
     }
   }, [isDocrefExists, currentUser]);
+
+  useEffect(() => {
+    if (isDocrefExists && currentUser) {
+      setUserFriends(temp);
+    }
+  }, [temp, currentUser]);
 
   useEffect(() => {
     if (userFriends && userFriends.length > 0) {
@@ -108,7 +116,7 @@ export const UserStatusProvider = ({ children }) => {
 
   return (
     <UserStatusContext.Provider
-      value={{ ...state, resetStatus, setUserFriends }}
+      value={{ ...state, resetStatus, setUserFriends, temp }}
     >
       {children}
     </UserStatusContext.Provider>

@@ -25,12 +25,20 @@ const Chats = ({ color, onOpen, isOnMobile }) => {
 
   useEffect(() => {
     const getChats = () => {
-      const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
-        const res = doc.data();
-        const data = Object.entries(res).sort((a, b) => b[1].date - a[1].date);
+      const unsub = onSnapshot(
+        doc(db, 'userChats', currentUser.uid),
+        (doc) => {
+          const res = doc.data();
+          const data = Object.entries(res).sort(
+            (a, b) => b[1].date - a[1].date
+          );
 
-        setChats(data);
-      });
+          setChats(data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
 
       return () => unsub();
     };
@@ -71,7 +79,6 @@ const Chats = ({ color, onOpen, isOnMobile }) => {
 
     if (currentUser.uid) {
       getChats();
-      console.log('time');
       // const timeout = setTimeout(() => {
       // }, 2000);
 

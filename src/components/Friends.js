@@ -4,12 +4,13 @@ import { useUserStatusContext } from '../context/UserStatusContext';
 import AvatarWithBadge from './AvatarWithBadge';
 
 const Friends = () => {
-  const { userFriends, onlineFriends } = useUserStatusContext();
+  const { userFriends, temp: friends } = useUserStatusContext();
+
   return (
     <AvatarGroup size='md' max={4} px={4} mb={4}>
-      {userFriends &&
-        userFriends.length > 0 &&
-        userFriends.map((friend) => {
+      {friends &&
+        friends.length > 0 &&
+        friends.map((friend) => {
           const { email, photoURL, uid } = friend;
           return (
             <AvatarWithBadge
