@@ -14,7 +14,6 @@ import { db } from '../firebase.config';
 import { useAuthContext } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
 import AvatarWithBadge from './AvatarWithBadge';
-import { async } from '@firebase/util';
 import { useUserStatusContext } from '../context/UserStatusContext';
 
 const Chats = ({ color, onOpen, isOnMobile }) => {
@@ -36,8 +35,8 @@ const Chats = ({ color, onOpen, isOnMobile }) => {
       return () => unsub();
     };
     // console.log(chats);
-    currentUser.uid && getChats();
-  }, [currentUser.uid]);
+    currentUser.uid && userFriends?.length > 0 && getChats();
+  }, [currentUser.uid, userFriends]);
 
   // useEffect(() => {
   //   const timeout = setTimeout(() => {
@@ -61,6 +60,7 @@ const Chats = ({ color, onOpen, isOnMobile }) => {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists() && userFriends?.length > 0) {
+        console.log(docSnap.data());
         handleSelect(
           Object.entries(docSnap.data())?.sort(
             (a, b) => b[1].date - a[1].date
@@ -69,8 +69,15 @@ const Chats = ({ color, onOpen, isOnMobile }) => {
       }
     };
 
-    currentUser.uid && getChats();
-  }, []);
+    if (currentUser.uid) {
+      getChats();
+      console.log('time');
+      // const timeout = setTimeout(() => {
+      // }, 2000);
+
+      // return () => clearTimeout(timeout);
+    }
+  }, [currentUser.uid, userFriends]);
 
   const handleSelect = (userInfo) => {
     dispatch({ type: 'CHANGE_USER', payload: userInfo });

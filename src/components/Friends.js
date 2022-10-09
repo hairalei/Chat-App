@@ -1,5 +1,5 @@
 import { AvatarGroup } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useUserStatusContext } from '../context/UserStatusContext';
 import AvatarWithBadge from './AvatarWithBadge';
 

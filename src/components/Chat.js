@@ -40,7 +40,7 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
   const { data } = useChatContext();
   const { currentUser } = useAuthContext();
   const { userFriends } = useUserStatusContext();
-  const { dark, light } = themes[data.theme];
+  const { theme } = data && data;
 
   const [fullscreen, setFullscreen] = useState(false);
 
@@ -54,7 +54,7 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
     <Flex
       as='section'
       flex={fullscreen ? '100%' : 2}
-      backgroundColor={light}
+      backgroundColor={`${theme}.100`}
       direction='column'
       position='relative'
       height='100%'
@@ -64,7 +64,7 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
       <Flex
         as='header'
         color='gray.200'
-        backgroundColor={dark}
+        backgroundColor={`${theme}.600`}
         h='20'
         py='5'
         px={4}

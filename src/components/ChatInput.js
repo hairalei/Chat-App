@@ -154,7 +154,7 @@ const ChatInput = () => {
             variant='ghost'
             colorScheme='twitter'
             icon={
-              (data && emojis[data.emoji]['component']) || <BsHandThumbsUp />
+              (data && emojis[data?.emoji]?.component) || <BsHandThumbsUp />
             }
             onClick={() =>
               handleSend(data && emojis[data.emoji]['emoji']) || '👍🏻'

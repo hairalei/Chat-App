@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { db } from '../firebase.config';
 import { useAuthContext } from './AuthContext';
+import { useChatContext } from './ChatContext';
 
 const UserStatusContext = createContext();
 
@@ -20,7 +21,10 @@ const INITIAL_STATE = {
 const reducer = (state, action) => {
   switch (action.type) {
     case 'SET_USER_FRIENDS':
-      return { ...state, userFriends: action.payload };
+      return {
+        ...state,
+        userFriends: action.payload,
+      };
 
     case 'SET_IS_DOCREF_EXISTS':
       return { ...state, isDocrefExists: action.payload };
@@ -34,14 +38,18 @@ const reducer = (state, action) => {
 };
 
 export const UserStatusProvider = ({ children }) => {
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
+  const [online, setOnline] = useState({});
   const { currentUser } = useAuthContext();
+  const { data } = useChatContext();
+
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
   const { userFriends, onlineFriends, isDocrefExists } = state;
 
   const resetStatus = () => {
+    setOnline({});
     dispatch({ type: 'RESET_STATUS' });
-    setData([]);
+    // setData([]);
   };
 
   const setUserFriends = (user) => {
@@ -63,39 +71,40 @@ export const UserStatusProvider = ({ children }) => {
       }
     }
     fetchDocument();
-  }, [currentUser]);
+  }, [currentUser, data?.user?.uid]);
 
   useEffect(() => {
-    if (isDocrefExists) {
+    if (isDocrefExists && currentUser) {
       const unsub = onSnapshot(doc(db, 'users', currentUser.uid), (doc) => {
-        setData(doc.data().friends);
+        // setData(doc.data().friends);
+        const isEmpty = Object.keys(doc?.data())?.length === 0;
+
+        !isEmpty && setUserFriends(doc.data().friends);
       });
 
       return () => unsub();
     }
-  }, [isDocrefExists]);
-
-  useEffect(() => {
-    if (currentUser && currentUser.uid && data && data.length > 0) {
-      const unsub = onSnapshot(doc(db, 'users', currentUser.uid), (doc) => {
-        dispatch({ type: 'SET_USER_FRIENDS', payload: doc.data().friends });
-      });
-
-      return () => unsub();
-    }
-  }, [data, currentUser]);
+  }, [isDocrefExists, currentUser]);
 
   useEffect(() => {
     if (userFriends && userFriends.length > 0) {
       userFriends.forEach((friend) => {
         const unsub = onSnapshot(doc(db, 'userStatus', friend.uid), (doc) => {
-          dispatch({ type: 'SET_ONLINE_FRIENDS', payload: { ...doc.data() } });
+          setOnline((prev) => {
+            return { ...prev, ...doc.data() };
+          });
         });
+
+        console.log(online);
 
         return () => unsub();
       });
     }
   }, [userFriends]);
+
+  useEffect(() => {
+    dispatch({ type: 'SET_ONLINE_FRIENDS', payload: { ...online } });
+  }, [online]);
 
   return (
     <UserStatusContext.Provider

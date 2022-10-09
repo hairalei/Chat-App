@@ -34,7 +34,6 @@ const Register = () => {
         return { ...prev, file: e.target.files[0] };
       });
     }
-    console.log(displayName.length);
   };
 
   const handleSubmit = async (e) => {

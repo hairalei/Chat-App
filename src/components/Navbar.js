@@ -12,6 +12,7 @@ import {
   Image,
   useMediaQuery,
   AvatarBadge,
+  useToast,
 } from '@chakra-ui/react';
 import React from 'react';
 import logo from '../assets/LOGO.svg';
@@ -31,6 +32,7 @@ const Navbar = ({ color, isOnMobile }) => {
   const { dispatch, resetChat } = useChatContext();
   const { resetStatus } = useUserStatusContext();
   const [isLargerThan1400] = useMediaQuery('(min-width: 1400px)');
+  const toast = useToast();
 
   const handleLogOut = () => {
     setDoc(doc(db, 'userStatus', uid), {
@@ -40,8 +42,16 @@ const Navbar = ({ color, isOnMobile }) => {
     resetStatus();
     resetChat();
     dispatch({ type: 'RESET_STATE' });
-    console.log('out');
-    signOut(auth);
+    toast({
+      title: `Signing out`,
+      status: 'info',
+      duration: 3000,
+      isClosable: true,
+    });
+
+    setTimeout(() => {
+      signOut(auth);
+    }, 2000);
   };
 
   return (
