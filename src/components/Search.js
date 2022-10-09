@@ -61,7 +61,6 @@ const Search = () => {
 
     try {
       const querySnapshot = await getDocs(q);
-      console.log(querySnapshot.docs.length);
 
       if (querySnapshot.docs.length === 0) {
         setError('User does not exists');

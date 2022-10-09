@@ -52,7 +52,6 @@ const Chats = ({ color, onOpen, isOnMobile }) => {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists() && userFriends?.length > 0) {
-        console.log(docSnap.data());
         handleSelect(
           Object.entries(docSnap.data())?.sort(
             (a, b) => b[1].date - a[1].date

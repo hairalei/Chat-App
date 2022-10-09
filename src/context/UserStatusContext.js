@@ -103,7 +103,7 @@ export const UserStatusProvider = ({ children }) => {
         return () => unsub();
       });
     }
-  }, [userFriends]);
+  }, [userFriends, temp]);
 
   useEffect(() => {
     dispatch({ type: 'SET_ONLINE_FRIENDS', payload: { ...online } });

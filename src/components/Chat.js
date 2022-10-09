@@ -35,6 +35,7 @@ import Profile from './Profile';
 import AvatarWithBadge from './AvatarWithBadge';
 import { useUserStatusContext } from '../context/UserStatusContext';
 import ProfileButton from './ProfileButton';
+import UnfriendButton from './UnfriendButton';
 
 const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
   const { data } = useChatContext();
@@ -126,7 +127,7 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
 
                   <ModalButton title='theme' />
 
-                  <MenuItem color='red.500'>Unfriend</MenuItem>
+                  <UnfriendButton />
                 </MenuList>
               </Menu>
             </Box>
@@ -136,7 +137,7 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
 
       {/* ========== message box ==========  */}
       <Box overflowY='auto' h='100%' mb={20}>
-        <Messages />
+        {userFriends && data.chatId && <Messages />}
         {userFriends && data.chatId && <ChatInput />}
       </Box>
     </Flex>
