@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -13,8 +13,11 @@ import {
   Text,
   Icon,
   Spinner,
+  Box,
+  IconButton,
 } from '@chakra-ui/react';
 import { FcAddImage } from 'react-icons/fc';
+import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import logo from '../assets/LogoWithName.svg';
 
@@ -26,6 +29,9 @@ const Form = ({
   file,
   handleChange,
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   return (
     <>
       <Center w='100vw' h='100vh' bgGradient='linear(to-r, blue.200, blue.300)'>
@@ -80,27 +86,59 @@ const Form = ({
 
               {/* password */}
               <FormLabel htmlFor='password'>Password</FormLabel>
-              <Input
-                type='password'
-                id='password'
-                placeholder='******'
-                _placeholder={{ letterSpacing: ' 2px', fontSize: '20px' }}
-                mb='4'
-                onChange={handleChange}
-              />
+              <Box position='relative' mb='4'>
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  id='password'
+                  placeholder='******'
+                  _placeholder={{ letterSpacing: ' 2px', fontSize: '20px' }}
+                  onChange={handleChange}
+                />
+                <IconButton
+                  as={showPassword ? IoEyeOutline : IoEyeOffOutline}
+                  position='absolute'
+                  cursor='pointer'
+                  variant='unstyled'
+                  top='50%'
+                  right={3}
+                  transform='auto'
+                  translateY='-50%'
+                  size='xs'
+                  color='gray.500'
+                  onClick={() => setShowPassword(!showPassword)}
+                  zIndex='modal'
+                />
+              </Box>
 
               {/* confirm password  */}
               {location === 'Register' && (
                 <>
                   <FormLabel htmlFor='password'>Confirm Password</FormLabel>
-                  <Input
-                    type='password'
-                    id='confirmPassword'
-                    placeholder='******'
-                    _placeholder={{ letterSpacing: ' 2px', fontSize: '20px' }}
-                    mb='4'
-                    onChange={handleChange}
-                  />
+                  <Box position='relative' mb='4'>
+                    <Input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      id='password'
+                      placeholder='******'
+                      _placeholder={{ letterSpacing: ' 2px', fontSize: '20px' }}
+                      onChange={handleChange}
+                    />
+                    <IconButton
+                      as={showConfirmPassword ? IoEyeOutline : IoEyeOffOutline}
+                      position='absolute'
+                      cursor='pointer'
+                      variant='unstyled'
+                      top='50%'
+                      right={3}
+                      transform='auto'
+                      translateY='-50%'
+                      size='xs'
+                      color='gray.500'
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      zIndex='modal'
+                    />
+                  </Box>
                 </>
               )}
 
