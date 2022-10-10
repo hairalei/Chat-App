@@ -10,6 +10,7 @@ import {
   MenuItem,
   Button,
   useToast,
+  Icon,
 } from '@chakra-ui/react';
 import {
   arrayRemove,
@@ -21,8 +22,9 @@ import {
 import { db } from '../firebase.config';
 import { useAuthContext } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
+import { IoWarning } from 'react-icons/io5';
 
-const UnfriendButton = () => {
+const UnfriendButton = ({ handleFullscreen, fullscreen }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { currentUser } = useAuthContext();
   const { data, resetChat } = useChatContext();
@@ -38,6 +40,8 @@ const UnfriendButton = () => {
         duration: 3000,
         isClosable: true,
       });
+      resetChat();
+      onClose();
       return;
     }
 
@@ -49,7 +53,7 @@ const UnfriendButton = () => {
     try {
       await deleteDoc(doc(db, 'chats', combinedId));
 
-      //create user chats
+      //delete user chats
       await updateDoc(doc(db, 'userChats', currentUser.uid), {
         [combinedId]: deleteField(),
       });
@@ -58,8 +62,7 @@ const UnfriendButton = () => {
         [combinedId]: deleteField(),
       });
 
-      // update friends list
-
+      // delete user from friends list
       await updateDoc(doc(db, 'users', currentUser.uid), {
         friends: arrayRemove({
           uid: user.uid,
@@ -88,6 +91,7 @@ const UnfriendButton = () => {
       console.log(error);
     }
 
+    fullscreen && handleFullscreen();
     resetChat();
     onClose();
   };
@@ -100,8 +104,14 @@ const UnfriendButton = () => {
 
       <AlertDialog isCentered={true} isOpen={isOpen} onClose={onClose}>
         <AlertDialogOverlay>
-          <AlertDialogContent>
+          <AlertDialogContent backgroundColor='red.100'>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+              <Icon
+                as={IoWarning}
+                display='block'
+                color='red.800'
+                boxSize={10}
+              />
               Unfriend user
             </AlertDialogHeader>
 
@@ -112,7 +122,9 @@ const UnfriendButton = () => {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button onClick={onClose}>Cancel</Button>
+              <Button variant='ghost' onClick={onClose}>
+                Cancel
+              </Button>
               <Button colorScheme='red' onClick={handleDelete} ml={3}>
                 Unfriend
               </Button>
