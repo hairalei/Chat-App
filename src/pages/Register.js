@@ -106,6 +106,7 @@ const Register = () => {
               ...formValues,
               uid: user.uid,
               displayName,
+              searchName: displayName.toLowerCase(),
               photoURL: downloadURL,
             };
             delete formDataCopy.password;

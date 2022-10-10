@@ -95,7 +95,7 @@ const Form = ({
                   onChange={handleChange}
                 />
                 <IconButton
-                  as={showPassword ? IoEyeOutline : IoEyeOffOutline}
+                  icon={showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
                   position='absolute'
                   cursor='pointer'
                   variant='unstyled'
@@ -103,7 +103,7 @@ const Form = ({
                   right={3}
                   transform='auto'
                   translateY='-50%'
-                  size='xs'
+                  fontSize={24}
                   color='gray.500'
                   onClick={() => setShowPassword(!showPassword)}
                   zIndex='modal'
@@ -113,17 +113,25 @@ const Form = ({
               {/* confirm password  */}
               {location === 'Register' && (
                 <>
-                  <FormLabel htmlFor='password'>Confirm Password</FormLabel>
+                  <FormLabel htmlFor='confirmPassword'>
+                    Confirm Password
+                  </FormLabel>
                   <Box position='relative' mb='4'>
                     <Input
                       type={showConfirmPassword ? 'text' : 'password'}
-                      id='password'
+                      id='confirmPassword'
                       placeholder='******'
                       _placeholder={{ letterSpacing: ' 2px', fontSize: '20px' }}
                       onChange={handleChange}
                     />
                     <IconButton
-                      as={showConfirmPassword ? IoEyeOutline : IoEyeOffOutline}
+                      icon={
+                        showConfirmPassword ? (
+                          <IoEyeOutline />
+                        ) : (
+                          <IoEyeOffOutline />
+                        )
+                      }
                       position='absolute'
                       cursor='pointer'
                       variant='unstyled'
@@ -131,7 +139,7 @@ const Form = ({
                       right={3}
                       transform='auto'
                       translateY='-50%'
-                      size='xs'
+                      fontSize={24}
                       color='gray.500'
                       onClick={() =>
                         setShowConfirmPassword(!showConfirmPassword)

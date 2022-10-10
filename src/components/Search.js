@@ -22,6 +22,9 @@ import {
   updateDoc,
   serverTimestamp,
   arrayUnion,
+  orderBy,
+  startAt,
+  endAt,
 } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import { useAuthContext } from '../context/AuthContext';
@@ -56,7 +59,7 @@ const Search = () => {
 
     const q = query(
       collection(db, 'users'),
-      where('displayName', '==', username)
+      where('searchName', '==', username.toLowerCase())
     );
 
     try {
@@ -64,6 +67,8 @@ const Search = () => {
 
       if (querySnapshot.docs.length === 0) {
         setError('User does not exists');
+        setIsLoading(false);
+        return;
       }
 
       querySnapshot.forEach((doc) => {
@@ -81,6 +86,8 @@ const Search = () => {
   };
 
   const handleSelect = async (user) => {
+    setError(null);
+
     // checks if chats in firestore exists, if not create
     if (user.uid === currentUser.uid) {
       toast({
@@ -218,8 +225,6 @@ const Search = () => {
             mb={4}
             direction='column'
             px='2'
-            borderBottom='1px'
-            borderColor='gray.300'
             pb='3'
             display={hide ? 'none' : 'block'}
             onClick={() => {
