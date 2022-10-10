@@ -29,7 +29,7 @@ const Profile = ({ onClose, owner }) => {
           fontSize='2xl'
           textTransform='capitalize'
           bgColor='blue.200'
-          pb={20}
+          pb={24}
         ></ModalHeader>
         <ModalCloseButton />
         <ModalBody>

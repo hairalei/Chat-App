@@ -7,7 +7,15 @@ const Friends = () => {
   const { temp: friends } = useUserStatusContext();
 
   return (
-    <AvatarGroup size='md' max={4} px={4} mb={4}>
+    <AvatarGroup
+      size='md'
+      max={4}
+      px={4}
+      mb={4}
+      pb={4}
+      borderBottom='1px'
+      borderColor='gray.300'
+    >
       {friends &&
         friends.length > 0 &&
         friends.map((friend) => {
