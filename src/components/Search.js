@@ -29,7 +29,6 @@ import {
 import { db } from '../firebase.config';
 import { useAuthContext } from '../context/AuthContext';
 import Friends from './Friends';
-import { async } from '@firebase/util';
 import { useUserStatusContext } from '../context/UserStatusContext';
 import { useChatContext } from '../context/ChatContext';
 
@@ -50,28 +49,40 @@ const Search = () => {
   }, []);
 
   const handleSearch = async (e) => {
-    if (e.code !== 'Enter') return;
+    if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
 
     setHide(false);
     setError(null);
     setResults([]);
     setIsLoading(true);
+    console.log('search');
 
     const q = query(
       collection(db, 'users'),
       where('searchName', '==', username.toLowerCase())
     );
+    const q2 = query(
+      collection(db, 'users'),
+      where('username', '==', username)
+    );
 
     try {
       const querySnapshot = await getDocs(q);
+      const querySnapshot2 = await getDocs(q2);
 
-      if (querySnapshot.docs.length === 0) {
+      if (querySnapshot.docs.length === 0 && querySnapshot2.docs.length === 0) {
         setError('User does not exists');
         setIsLoading(false);
         return;
       }
 
       querySnapshot.forEach((doc) => {
+        setResults((prev) => {
+          return [...prev, doc.data()];
+        });
+      });
+
+      querySnapshot2.forEach((doc) => {
         setResults((prev) => {
           return [...prev, doc.data()];
         });
@@ -231,6 +242,8 @@ const Search = () => {
               handleSelect(result);
             }}
             cursor='pointer'
+            borderBottom={results && '1px'}
+            borderColor={results && 'gray.300'}
           >
             {!isLoading && !error && (
               <Flex alignItems='center'>

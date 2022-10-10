@@ -15,6 +15,7 @@ import {
   Spinner,
   Box,
   IconButton,
+  Image,
 } from '@chakra-ui/react';
 import { FcAddImage } from 'react-icons/fc';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
@@ -34,35 +35,39 @@ const Form = ({
 
   return (
     <>
-      <Center w='100vw' h='100vh' bgGradient='linear(to-r, blue.200, blue.300)'>
-        <Container bgColor='gray.50' p='8' rounded='xl' boxShadow='xl'>
-          <Flex
-            display='flex'
-            direction='column'
-            alignItems={'center'}
-            justifyContent='center'
-            gap='4'
-            mb='7'
+      <Container bgColor='gray.50' p={[5, 8, 10]} rounded='xl' boxShadow='xl'>
+        <Flex
+          display='flex'
+          direction='column'
+          alignItems={'center'}
+          justifyContent='center'
+          gap='4'
+          mb='7'
+        >
+          <Image width={[40, 52, 56, 64]} src={logo} alt='logo' mx='8' />
+          <Heading
+            as='h2'
+            size='lg'
+            display='inline-block'
+            textAlign='center'
+            color='gray.600'
+            fontWeight='normal'
           >
-            <img src={logo} alt='logo' mx='8' />
-            <Heading
-              as='h2'
-              size='lg'
-              display='inline-block'
-              textAlign='center'
-              color='gray.600'
-              fontWeight='normal'
-            >
-              {location}
-            </Heading>
-          </Flex>
+            {location}
+          </Heading>
+        </Flex>
 
-          {/* =============== form =============== */}
-          <FormControl as='form' isInvalid={error} onSubmit={handleSubmit}>
-            <Flex direction='column'>
+        {/* =============== form =============== */}
+        <FormControl as='form' isInvalid={error} onSubmit={handleSubmit}>
+          <Flex direction='column'>
+            <Flex
+              direction={['column', 'column', 'row']}
+              justifyContent='space-between'
+              mb={[4, 4, 0]}
+            >
               {/* name */}
               {location === 'Register' && (
-                <>
+                <Flex direction='column'>
                   <FormLabel htmlFor='name'>Display Name</FormLabel>
                   <Input
                     id='displayName'
@@ -70,146 +75,163 @@ const Form = ({
                     placeholder='Hong Dusik'
                     mb='4'
                     onChange={handleChange}
+                    minLength={1}
+                    maxLength='25'
                   />
-                </>
+                </Flex>
               )}
 
-              {/* email */}
-              <FormLabel htmlFor='email'>Email Address</FormLabel>
-              <Input
-                type='email'
-                id='email'
-                placeholder='chiefhong@mail.com'
-                mb='4'
-                onChange={handleChange}
-              />
-
-              {/* password */}
-              <FormLabel htmlFor='password'>Password</FormLabel>
-              <Box position='relative' mb='4'>
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  id='password'
-                  placeholder='******'
-                  _placeholder={{ letterSpacing: ' 2px', fontSize: '20px' }}
-                  onChange={handleChange}
-                />
-                <IconButton
-                  icon={showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
-                  position='absolute'
-                  cursor='pointer'
-                  variant='unstyled'
-                  top='50%'
-                  right={3}
-                  transform='auto'
-                  translateY='-50%'
-                  fontSize={24}
-                  color='gray.500'
-                  onClick={() => setShowPassword(!showPassword)}
-                  zIndex='modal'
-                />
-              </Box>
-
-              {/* confirm password  */}
+              {/* username */}
               {location === 'Register' && (
-                <>
-                  <FormLabel htmlFor='confirmPassword'>
-                    Confirm Password
-                  </FormLabel>
-                  <Box position='relative' mb='4'>
-                    <Input
-                      type={showConfirmPassword ? 'text' : 'password'}
-                      id='confirmPassword'
-                      placeholder='******'
-                      _placeholder={{ letterSpacing: ' 2px', fontSize: '20px' }}
-                      onChange={handleChange}
-                    />
-                    <IconButton
-                      icon={
-                        showConfirmPassword ? (
-                          <IoEyeOutline />
-                        ) : (
-                          <IoEyeOffOutline />
-                        )
-                      }
-                      position='absolute'
-                      cursor='pointer'
-                      variant='unstyled'
-                      top='50%'
-                      right={3}
-                      transform='auto'
-                      translateY='-50%'
-                      fontSize={24}
-                      color='gray.500'
-                      onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
-                      }
-                      zIndex='modal'
-                    />
-                  </Box>
-                </>
-              )}
-
-              {/* picture  */}
-              {location === 'Register' && (
-                <>
-                  <FormLabel
-                    htmlFor='file'
-                    display='flex'
-                    alignItems='center'
-                    cursor='pointer'
-                  >
-                    <Icon as={FcAddImage} w='12' h='12' mr='2' />
-                    <Text as='span' color='gray.500' fontWeight='normal'>
-                      {file
-                        ? file.name.length > 35
-                          ? `${file.name.substring(0, 30)}...${file.name.slice(
-                              -3
-                            )}`
-                          : file.name
-                        : 'Add an avatar'}
-                    </Text>
-                  </FormLabel>
+                <Flex direction='column'>
+                  <FormLabel htmlFor='username'>Username</FormLabel>
                   <Input
-                    id='file'
-                    type='file'
-                    sx={{ display: 'none' }}
+                    id='username'
+                    type='text'
+                    placeholder='hongbanjang24'
+                    mb='4'
+                    onChange={handleChange}
+                    minLength={1}
+                    maxLength='20'
+                  />
+                  <FormHelperText as='p' mt={-2} ml={2} color='blue.500'>
+                    Username must be unique
+                  </FormHelperText>
+                </Flex>
+              )}
+            </Flex>
+
+            {/* email */}
+            <FormLabel htmlFor='email'>Email Address</FormLabel>
+            <Input
+              type='email'
+              id='email'
+              placeholder='hongdusik@mail.com'
+              mb='4'
+              onChange={handleChange}
+            />
+
+            {/* password */}
+            <FormLabel htmlFor='password'>Password</FormLabel>
+            <Box position='relative' mb='4'>
+              <Input
+                type={showPassword ? 'text' : 'password'}
+                id='password'
+                placeholder='******'
+                _placeholder={{ letterSpacing: ' 2px', fontSize: '20px' }}
+                onChange={handleChange}
+                minLength={6}
+              />
+              <IconButton
+                icon={showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
+                position='absolute'
+                cursor='pointer'
+                variant='unstyled'
+                right={0}
+                fontSize={24}
+                color='gray.500'
+                onClick={() => setShowPassword(!showPassword)}
+                zIndex='modal'
+                tabIndex={-1}
+              />
+            </Box>
+
+            {/* confirm password  */}
+            {location === 'Register' && (
+              <>
+                <FormLabel htmlFor='confirmPassword'>
+                  Confirm Password
+                </FormLabel>
+                <Box position='relative' mb='4'>
+                  <Input
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    id='confirmPassword'
+                    placeholder='******'
+                    _placeholder={{ letterSpacing: ' 2px', fontSize: '20px' }}
+                    minLength={6}
                     onChange={handleChange}
                   />
-                </>
-              )}
+                  <IconButton
+                    icon={
+                      showConfirmPassword ? (
+                        <IoEyeOutline />
+                      ) : (
+                        <IoEyeOffOutline />
+                      )
+                    }
+                    position='absolute'
+                    cursor='pointer'
+                    variant='unstyled'
+                    right={0}
+                    fontSize={24}
+                    color='gray.500'
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    tabIndex={-1}
+                    zIndex='modal'
+                  />
+                </Box>
+              </>
+            )}
 
-              {error && <FormErrorMessage>{error}</FormErrorMessage>}
+            {/* picture  */}
+            {location === 'Register' && (
+              <>
+                <FormLabel
+                  htmlFor='file'
+                  display='flex'
+                  alignItems='center'
+                  cursor='pointer'
+                >
+                  <Icon as={FcAddImage} w='12' h='12' mr='2' />
+                  <Text as='span' color='gray.500' fontWeight='normal'>
+                    {file
+                      ? file.name.length > 35
+                        ? `${file.name.substring(0, 30)}...${file.name.slice(
+                            -3
+                          )}`
+                        : file.name
+                      : 'Add an avatar'}
+                  </Text>
+                </FormLabel>
+                <Input
+                  id='file'
+                  type='file'
+                  sx={{ display: 'none' }}
+                  onChange={handleChange}
+                />
+              </>
+            )}
 
-              <Button
-                type='submit'
-                colorScheme='blue'
-                variant='solid'
-                mt='6'
-                onSubmit={handleSubmit}
-                textTransform='uppercase'
-                letterSpacing='2px'
-              >
-                {isLoading ? <Spinner /> : location}
-              </Button>
-            </Flex>
-          </FormControl>
+            {error && <FormErrorMessage>{error}</FormErrorMessage>}
 
-          <Text as='p' textAlign='center' color='gray.600' mt='2'>
-            {location === 'Register'
-              ? 'Already have an account? '
-              : 'No account yet? '}
-
-            <Button variant='link' colorScheme='blue'>
-              {location === 'Register' ? (
-                <Link to='/login'>Login</Link>
-              ) : (
-                <Link to='/register'>Register</Link>
-              )}
+            <Button
+              type='submit'
+              colorScheme='blue'
+              variant='solid'
+              mt='6'
+              onSubmit={handleSubmit}
+              textTransform='uppercase'
+              letterSpacing='2px'
+            >
+              {isLoading ? <Spinner /> : location}
             </Button>
-          </Text>
-        </Container>
-      </Center>
+          </Flex>
+        </FormControl>
+
+        <Text as='p' textAlign='center' color='gray.600' mt='2'>
+          {location === 'Register'
+            ? 'Already have an account? '
+            : 'No account yet? '}
+
+          <Button variant='link' colorScheme='blue'>
+            {location === 'Register' ? (
+              <Link to='/login'>Login</Link>
+            ) : (
+              <Link to='/register'>Register</Link>
+            )}
+          </Button>
+        </Text>
+      </Container>
     </>
   );
 };

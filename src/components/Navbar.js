@@ -87,7 +87,13 @@ const Navbar = ({ color, isOnMobile }) => {
             >
               <Flex alignItems='center' justifyContent='center'>
                 <Avatar name={displayName} src={photoURL} mr={3}>
-                  <AvatarBadge boxSize={3} bg='green.500' border='1px' />
+                  <AvatarBadge
+                    boxSize={3}
+                    bg='green.500'
+                    border='1px'
+                    right='3px'
+                    bottom='3px'
+                  />
                 </Avatar>
                 <Box overflowWrap='break-word'>
                   <Text

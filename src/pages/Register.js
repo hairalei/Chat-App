@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from '../components/Form';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
+import {
+  setDoc,
+  doc,
+  serverTimestamp,
+  query,
+  getDoc,
+  getDocs,
+  where,
+  collection,
+} from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { auth, db, storage } from '../firebase.config';
+import { Box, Center, Flex } from '@chakra-ui/react';
 
 const initialFormValues = {
   displayName: '',
@@ -18,7 +28,8 @@ const Register = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [formValues, setFormValues] = useState(initialFormValues);
-  const { displayName, email, password, confirmPassword, file } = formValues;
+  const { displayName, email, password, confirmPassword, file, username } =
+    formValues;
 
   const navigate = useNavigate();
 
@@ -36,11 +47,45 @@ const Register = () => {
     }
   };
 
+  useEffect(() => {
+    const getUsername = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      const q = query(
+        collection(db, 'users'),
+        where('username', '==', username)
+      );
+
+      try {
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.docs.length !== 0) {
+          setError('Username is already taken');
+          setIsLoading(false);
+          return;
+        }
+
+        querySnapshot.forEach((doc) => {
+          console.log(doc.data());
+        });
+
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false);
+        setError('Something went wrong. Please try again.');
+      }
+    };
+
+    username && getUsername();
+  }, [username]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    if (!displayName || !email || !password || !confirmPassword) {
+    if (!displayName || !username || !email || !password || !confirmPassword) {
       setIsLoading(false);
       setError('All fields are required');
       return;
@@ -52,9 +97,15 @@ const Register = () => {
       return;
     }
 
-    if (displayName.length > 25) {
+    if (displayName.trim().length > 25 || displayName.trim().length === 0) {
       setIsLoading(false);
-      setError('Display Name should be less than 25 characters');
+      setError('Display Name should be 1 to 25 characters');
+      return;
+    }
+
+    if (username.trim().length > 20 || username.trim().length === 0) {
+      setIsLoading(false);
+      setError('Display Name should be 1 to 20 characters');
       return;
     }
 
@@ -106,6 +157,7 @@ const Register = () => {
               ...formValues,
               uid: user.uid,
               displayName,
+              username,
               searchName: displayName.toLowerCase(),
               photoURL: downloadURL,
             };
@@ -134,19 +186,27 @@ const Register = () => {
     } catch (error) {
       setIsLoading(false);
       console.log(error);
-      setError('Something went wrong.Try again.');
+      setError(error.message);
     }
   };
 
   return (
-    <Form
-      location='Register'
-      handleSubmit={handleSubmit}
-      error={error}
-      isLoading={isLoading}
-      file={file}
-      handleChange={handleChange}
-    />
+    <Flex
+      alignItems='center'
+      justifyContent='center'
+      minW='100vw'
+      minH='100vh'
+      bgGradient='linear(to-r, blue.200, blue.300)'
+    >
+      <Form
+        location='Register'
+        handleSubmit={handleSubmit}
+        error={error}
+        isLoading={isLoading}
+        file={file}
+        handleChange={handleChange}
+      />
+    </Flex>
   );
 };
 

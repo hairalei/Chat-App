@@ -15,7 +15,11 @@ function App() {
   };
 
   return (
-    <Box w='100vw' h='100vh' bgGradient='linear(to-r, blue.200, blue.300)'>
+    <Box
+      minW='100vw'
+      minH='100vh'
+      bgGradient='linear(to-r, blue.200, blue.300)'
+    >
       <BrowserRouter>
         <Routes>
           <Route path='/'>
