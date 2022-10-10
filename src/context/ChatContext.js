@@ -1,5 +1,4 @@
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth, db } from '../firebase.config';
+import { db } from '../firebase.config';
 import React, {
   createContext,
   useContext,
@@ -8,7 +7,7 @@ import React, {
   useReducer,
 } from 'react';
 import { useAuthContext } from './AuthContext';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 
 const ChatContext = createContext();
 
@@ -28,8 +27,13 @@ export const ChatContextProvider = ({ children }) => {
     });
   };
 
-  const changeUser = (user) => {
-    dispatch({ type: 'CHANGE_USER', payload: user });
+  const changeUser = async (user) => {
+    const docRef = doc(db, 'users', user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      dispatch({ type: 'CHANGE_USER', payload: docSnap.data() });
+    }
   };
 
   const chatReducer = (state, action) => {
@@ -101,7 +105,7 @@ export const ChatContextProvider = ({ children }) => {
 
       return () => unsub();
     }
-  }, [state.user]);
+  }, [state.user, currentUser.uid, currentUser.displayName]);
 
   return (
     <ChatContext.Provider

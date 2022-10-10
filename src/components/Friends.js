@@ -13,8 +13,8 @@ const Friends = () => {
       px={4}
       mb={4}
       pb={4}
-      borderBottom={friends && '1px'}
-      borderColor={friends && 'gray.300'}
+      borderBottom={friends && friends.length > 0 && '1px'}
+      borderColor={friends && friends.length > 0 && 'gray.300'}
     >
       {friends &&
         friends.length > 0 &&

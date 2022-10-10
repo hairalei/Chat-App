@@ -80,7 +80,7 @@ const ModalSettings = ({ title, onClose }) => {
       await updateDoc(doc(db, 'chats', data.chatId), {
         messages: arrayUnion({
           id: uuid(),
-          info: `${data.nickname[currentUser.displayName]} changed ${title}`,
+          info: `${data.nickname[currentUser.username]} changed ${title}`,
           senderId: currentUser.uid,
           date: Timestamp.now(),
         }),
@@ -88,14 +88,14 @@ const ModalSettings = ({ title, onClose }) => {
 
       await updateDoc(doc(db, 'userChats', currentUser.uid), {
         [data.chatId + '.lastMessage']: {
-          info: `${data.nickname[currentUser.displayName]} changed ${title}`,
+          info: `${data.nickname[currentUser.username]} changed ${title}`,
         },
         [data.chatId + '.date']: serverTimestamp(),
       });
 
       await updateDoc(doc(db, 'userChats', data.user.uid), {
         [data.chatId + '.lastMessage']: {
-          info: `${data.nickname[currentUser.displayName]} changed ${title}`,
+          info: `${data.nickname[currentUser.username]} changed ${title}`,
         },
         [data.chatId + '.date']: serverTimestamp(),
       });
@@ -149,8 +149,8 @@ const ModalSettings = ({ title, onClose }) => {
               <Input
                 onChange={handleChange}
                 type='text'
-                id={data.user.displayName}
-                value={newNickname[data.user.displayName]}
+                id={data.user.username}
+                value={newNickname[data.user.username]}
                 placeholder={data.user.displayName}
               />
               <FormLabel textTransform='capitalize'>
@@ -159,9 +159,9 @@ const ModalSettings = ({ title, onClose }) => {
               <Input
                 onChange={handleChange}
                 type='text'
-                id={currentUser.displayName}
+                id={currentUser.username}
                 placeholder={currentUser.displayName}
-                value={newNickname[currentUser.displayName]}
+                value={newNickname[currentUser.username]}
               />
             </>
           )}

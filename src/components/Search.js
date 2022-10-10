@@ -134,14 +134,17 @@ const Search = () => {
           displayName: user.displayName,
           photoURL: user.photoURL,
           email: user.email,
+          username: user.username,
+          joinedAt: user.timestamp,
+          friends: user.friends,
         },
         [combinedId + '.date']: serverTimestamp(),
         [combinedId + '.chatSettings']: {
           chatEmoji: 'like',
           chatTheme: 'blue',
           nickname: {
-            [currentUser.displayName]: currentUser.displayName,
-            [user.displayName]: user.displayName,
+            [currentUser.username]: currentUser.displayName,
+            [user.username]: user.displayName,
           },
         },
       });
@@ -158,8 +161,8 @@ const Search = () => {
           chatEmoji: 'like',
           chatTheme: 'blue',
           nickname: {
-            [currentUser.displayName]: currentUser.displayName,
-            [user.displayName]: user.displayName,
+            [currentUser.username]: currentUser.displayName,
+            [user.username]: user.displayName,
           },
         },
       });

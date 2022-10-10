@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Flex, Avatar, Text, Heading } from '@chakra-ui/react';
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  onSnapshot,
-  orderBy,
-  query,
-  where,
-} from 'firebase/firestore';
+import { Flex, Text, Heading } from '@chakra-ui/react';
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import { useAuthContext } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
@@ -19,7 +10,7 @@ import { useUserStatusContext } from '../context/UserStatusContext';
 const Chats = ({ color, onOpen, isOnMobile }) => {
   const [chats, setChats] = useState('');
   const { currentUser } = useAuthContext();
-  const { dispatch, data } = useChatContext();
+  const { changeUser, data } = useChatContext();
   const { userFriends } = useUserStatusContext();
 
   useEffect(() => {
@@ -66,7 +57,7 @@ const Chats = ({ color, onOpen, isOnMobile }) => {
   }, [currentUser.uid, userFriends]);
 
   const handleSelect = (userInfo) => {
-    dispatch({ type: 'CHANGE_USER', payload: userInfo });
+    changeUser(userInfo);
   };
 
   return (

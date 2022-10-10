@@ -94,7 +94,7 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
               size={['md', 'lg']}
               fontWeight={{ base: 'normal', md: 'medium' }}
             >
-              {data?.nickname[data.user.displayName] || data.user?.displayName}
+              {data?.nickname[data.user.username] || data.user?.displayName}
             </Heading>
           </Flex>
         )}
