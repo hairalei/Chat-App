@@ -127,7 +127,10 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
 
                   <ModalButton title='theme' />
 
-                  <UnfriendButton />
+                  <UnfriendButton
+                    handleFullscreen={handleFullscreen}
+                    fullscreen={fullscreen}
+                  />
                 </MenuList>
               </Menu>
             </Box>
