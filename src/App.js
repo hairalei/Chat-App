@@ -16,7 +16,6 @@ function App() {
     });
   }, []);
 
-  console.log(currentUser.uid);
   return (
     <Box
       minW='100vw'

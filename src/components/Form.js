@@ -16,12 +16,15 @@ import {
   Box,
   IconButton,
   Image,
+  Divider,
 } from '@chakra-ui/react';
 import { FcAddImage } from 'react-icons/fc';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import logo from '../assets/LogoWithName.svg';
 import GoogleButton from './GoogleButton';
+import DemoButton from './DemoButton';
+import DividerCustom from './DividerCustom';
 
 const Form = ({
   location,
@@ -233,7 +236,12 @@ const Form = ({
             </Button>
           </Flex>
 
-          {location === 'Login' && <GoogleButton />}
+          {location === 'Login' && (
+            <>
+              <DividerCustom />
+              <GoogleButton />
+            </>
+          )}
 
           {location !== 'Forgot Password' ? (
             <Text as='p' textAlign='center' color='gray.600' mt='2'>
@@ -259,6 +267,17 @@ const Form = ({
             >
               <Link to='/login'>Back to Login</Link>
             </Button>
+          )}
+
+          {location === 'Login' && (
+            <>
+              <DividerCustom />
+
+              <Flex gap={1}>
+                <DemoButton demoUser={1} />
+                <DemoButton demoUser={2} />
+              </Flex>
+            </>
           )}
         </FormControl>
       </Container>

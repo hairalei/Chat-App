@@ -74,7 +74,7 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
       >
         {/* user name */}
         {userFriends && data.chatId && (
-          <Flex gap={2}>
+          <Flex gap={2} alignItems='center'>
             <IconButton
               onClick={isOnMobile ? onClose : handleFullscreen}
               variant='ghost'

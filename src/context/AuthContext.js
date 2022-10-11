@@ -10,7 +10,6 @@ export const AuthContextProvider = ({ children }) => {
     JSON.parse(window.localStorage.getItem('homechat')) || {}
   );
 
-  console.log(currentUser.uid);
   const resetAuth = () => setCurrentUser({});
 
   useEffect(() => {

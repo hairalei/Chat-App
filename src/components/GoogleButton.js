@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, Text, useToast } from '@chakra-ui/react';
+import { Button, useToast } from '@chakra-ui/react';
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -11,7 +11,6 @@ import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase.config';
 
 const GoogleButton = () => {
-  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -19,7 +18,6 @@ const GoogleButton = () => {
   const toast = useToast();
 
   const onGoogleClick = async () => {
-    setError(null);
     setIsLoading(true);
 
     try {
@@ -73,25 +71,16 @@ const GoogleButton = () => {
     }
   };
   return (
-    <>
-      <Flex my={1}>
-        <Divider m={4} />
-        <Text as='span' color='gray.500'>
-          or
-        </Text>
-        <Divider m={4} />
-      </Flex>
-      <Button
-        isLoading={isLoading}
-        onClick={onGoogleClick}
-        width='full'
-        leftIcon={<FcGoogle />}
-        variant='outline'
-        colorScheme='blue'
-      >
-        Login with Google
-      </Button>
-    </>
+    <Button
+      isLoading={isLoading}
+      onClick={onGoogleClick}
+      width='full'
+      leftIcon={<FcGoogle />}
+      variant='outline'
+      colorScheme='blue'
+    >
+      Login with Google
+    </Button>
   );
 };
 

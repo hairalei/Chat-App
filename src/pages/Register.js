@@ -160,6 +160,7 @@ const Register = () => {
               username,
               searchName: displayName.toLowerCase(),
               photoURL: downloadURL,
+              friends: [],
             };
             delete formDataCopy.password;
             delete formDataCopy.confirmPassword;

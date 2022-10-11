@@ -55,7 +55,6 @@ const Search = () => {
     setError(null);
     setResults([]);
     setIsLoading(true);
-    console.log('search');
 
     const q = query(
       collection(db, 'users'),
@@ -136,7 +135,6 @@ const Search = () => {
           email: user.email,
           username: user.username,
           joinedAt: user.timestamp,
-          friends: user.friends,
         },
         [combinedId + '.date']: serverTimestamp(),
         [combinedId + '.chatSettings']: {
