@@ -49,7 +49,8 @@ const Search = () => {
   }, []);
 
   const handleSearch = async (e) => {
-    if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
+    // if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
+    e.preventDefault();
 
     setHide(false);
     setError(null);
@@ -203,22 +204,24 @@ const Search = () => {
 
   return (
     <>
-      <Input
-        variant='flushed'
-        type='text'
-        id='search'
-        placeholder='Search user...'
-        _placeholder={{ color: 'gray.400' }}
-        px='3'
-        mb='4'
-        onChange={(e) => {
-          setUsername(e.target.value);
-          setHide(true);
-          setError(null);
-        }}
-        onKeyDown={handleSearch}
-        value={username}
-      />
+      <form onSubmit={handleSearch}>
+        <Input
+          variant='flushed'
+          type='text'
+          id='search'
+          placeholder='Search user...'
+          _placeholder={{ color: 'gray.400' }}
+          px='3'
+          mb='4'
+          onChange={(e) => {
+            setUsername(e.target.value);
+            setHide(true);
+            setError(null);
+          }}
+          // onKeyDown={handleSearch}
+          value={username}
+        />
+      </form>
       {isLoading && (
         <Center>
           <Spinner />
