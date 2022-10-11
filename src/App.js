@@ -7,7 +7,7 @@ function App() {
   const { currentUser } = useAuthContext();
 
   const PrivateRoute = ({ children }) => {
-    if (!currentUser) {
+    if (!currentUser.uid) {
       return <Navigate to='/login' />;
     }
 

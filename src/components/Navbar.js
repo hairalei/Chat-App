@@ -29,7 +29,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { useUserStatusContext } from '../context/UserStatusContext';
 
 const Navbar = ({ color, isOnMobile }) => {
-  const { currentUser } = useAuthContext();
+  const { currentUser, resetAuth } = useAuthContext();
   const { displayName, photoURL, email, uid } = currentUser;
   const { resetChat } = useChatContext();
   const { resetStatus } = useUserStatusContext();
@@ -47,17 +47,16 @@ const Navbar = ({ color, isOnMobile }) => {
 
     resetStatus();
     resetChat();
+    resetAuth();
 
     toast({
-      title: `Signing out`,
-      status: 'info',
+      title: `Logged out`,
+      status: 'success',
       duration: 3000,
       isClosable: true,
     });
 
-    setTimeout(() => {
-      signOut(auth);
-    }, 2000);
+    signOut(auth);
   };
 
   return (
