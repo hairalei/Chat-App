@@ -152,6 +152,7 @@ const ModalSettings = ({ title, onClose }) => {
                 id={data.user.username}
                 value={newNickname[data.user.username]}
                 placeholder={data.user.displayName}
+                maxLength={20}
               />
               <FormLabel textTransform='capitalize'>
                 {currentUser.displayName}'s nickname
@@ -162,6 +163,7 @@ const ModalSettings = ({ title, onClose }) => {
                 id={currentUser.username}
                 placeholder={currentUser.displayName}
                 value={newNickname[currentUser.username]}
+                maxLength={20}
               />
             </>
           )}

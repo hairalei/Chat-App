@@ -21,6 +21,7 @@ import { FcAddImage } from 'react-icons/fc';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import logo from '../assets/LogoWithName.svg';
+import GoogleButton from './GoogleButton';
 
 const Form = ({
   location,
@@ -231,33 +232,35 @@ const Form = ({
               {isLoading ? <Spinner /> : location}
             </Button>
           </Flex>
-        </FormControl>
 
-        {location !== 'Forgot Password' ? (
-          <Text as='p' textAlign='center' color='gray.600' mt='2'>
-            {location === 'Register'
-              ? 'Already have an account? '
-              : 'No account yet? '}
+          {location === 'Login' && <GoogleButton />}
 
-            <Button variant='link' colorScheme='blue'>
-              {location === 'Register' ? (
-                <Link to='/login'>Login</Link>
-              ) : (
-                <Link to='/register'>Register</Link>
-              )}
+          {location !== 'Forgot Password' ? (
+            <Text as='p' textAlign='center' color='gray.600' mt='2'>
+              {location === 'Register'
+                ? 'Already have an account? '
+                : 'No account yet? '}
+
+              <Button variant='link' colorScheme='blue'>
+                {location === 'Register' ? (
+                  <Link to='/login'>Login</Link>
+                ) : (
+                  <Link to='/register'>Register</Link>
+                )}
+              </Button>
+            </Text>
+          ) : (
+            <Button
+              variant='link'
+              color='blue.400'
+              display='block'
+              margin='0 auto'
+              mt={1}
+            >
+              <Link to='/login'>Back to Login</Link>
             </Button>
-          </Text>
-        ) : (
-          <Button
-            variant='link'
-            color='blue.400'
-            display='block'
-            margin='0 auto'
-            mt={1}
-          >
-            <Link to='/login'>Back to Login</Link>
-          </Button>
-        )}
+          )}
+        </FormControl>
       </Container>
     </>
   );

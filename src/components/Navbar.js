@@ -48,6 +48,7 @@ const Navbar = ({ color, isOnMobile }) => {
     resetStatus();
     resetChat();
     resetAuth();
+    window.localStorage.removeItem('homechat');
 
     toast({
       title: `Logged out`,

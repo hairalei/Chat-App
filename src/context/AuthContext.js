@@ -6,18 +6,29 @@ import { doc, onSnapshot } from 'firebase/firestore';
 const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(window.localStorage.getItem('homechat')) || {}
+  );
 
+  console.log(currentUser.uid);
   const resetAuth = () => setCurrentUser({});
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
+      window.localStorage.setItem('homechat', JSON.stringify(user));
       setCurrentUser((prev) => {
         return { ...prev, ...user };
       });
     });
 
     return () => unsub();
+  }, []);
+
+  useEffect(() => {
+    const storage = JSON.parse(window.localStorage.getItem('homechat'));
+    setCurrentUser((prev) => {
+      return { ...prev, ...storage };
+    });
   }, []);
 
   useEffect(() => {
@@ -42,7 +53,7 @@ export const AuthContextProvider = ({ children }) => {
   }, [currentUser.uid, currentUser.displayName, currentUser.photoURL]);
 
   return (
-    <AuthContext.Provider value={{ currentUser, resetAuth }}>
+    <AuthContext.Provider value={{ currentUser, resetAuth, setCurrentUser }}>
       {children}
     </AuthContext.Provider>
   );

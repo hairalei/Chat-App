@@ -3,18 +3,20 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Box } from '@chakra-ui/react';
 import { useAuthContext } from './context/AuthContext';
 import ForgotPassword from './pages/ForgotPassword';
+import { useEffect, useState } from 'react';
+import PrivateRoute from './pages/PrivateRoute';
 
 function App() {
-  const { currentUser } = useAuthContext();
+  const { currentUser, setCurrentUser } = useAuthContext();
 
-  const PrivateRoute = ({ children }) => {
-    if (!currentUser.uid) {
-      return <Navigate to='/login' />;
-    }
+  useEffect(() => {
+    const storage = JSON.parse(window.localStorage.getItem('homechat'));
+    setCurrentUser((prev) => {
+      return { ...prev, ...storage };
+    });
+  }, []);
 
-    return children;
-  };
-
+  console.log(currentUser.uid);
   return (
     <Box
       minW='100vw'
