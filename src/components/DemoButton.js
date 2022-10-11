@@ -52,6 +52,7 @@ const DemoButton = ({ demoUser }) => {
         letterSpacing='2px'
         opacity={0.6}
         _hover={{ opacity: 1 }}
+        fontSize='sm'
       >
         {isLoading ? <Spinner /> : `Demo User${demoUser}`}
       </Button>

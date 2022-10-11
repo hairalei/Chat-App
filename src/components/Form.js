@@ -46,7 +46,7 @@ const Form = ({
           alignItems={'center'}
           justifyContent='center'
           gap='4'
-          mb='7'
+          mb={[3, 7]}
         >
           <Image width={[40, 52, 56, 64]} src={logo} alt='logo' mx='8' />
           <Heading
@@ -244,12 +244,18 @@ const Form = ({
           )}
 
           {location !== 'Forgot Password' ? (
-            <Text as='p' textAlign='center' color='gray.600' mt='2'>
+            <Text
+              as='p'
+              textAlign='center'
+              color='gray.600'
+              mt='2'
+              fontSize='sm'
+            >
               {location === 'Register'
                 ? 'Already have an account? '
                 : 'No account yet? '}
 
-              <Button variant='link' colorScheme='blue'>
+              <Button variant='link' colorScheme='blue' fontSize='sm'>
                 {location === 'Register' ? (
                   <Link to='/login'>Login</Link>
                 ) : (

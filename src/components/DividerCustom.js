@@ -6,7 +6,7 @@ const DividerCustom = () => {
     <>
       <Flex my={2}>
         <Divider m={4} />
-        <Text as='span' color='gray.500'>
+        <Text as='span' color='gray.500' fontSize='sm'>
           or
         </Text>
         <Divider m={4} />
