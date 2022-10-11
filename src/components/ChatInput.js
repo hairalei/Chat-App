@@ -32,6 +32,7 @@ const ChatInput = () => {
 
   const { currentUser } = useAuthContext();
   const { data } = useChatContext();
+  const { theme } = data && data;
 
   const toast = useToast();
 
@@ -152,7 +153,7 @@ const ChatInput = () => {
         <Flex alignItems='center' justifyContent='center'>
           <IconButton
             variant='ghost'
-            colorScheme='twitter'
+            colorScheme={theme || 'twitter'}
             icon={
               (data && emojis[data?.emoji]?.component) || <BsHandThumbsUp />
             }
@@ -172,7 +173,7 @@ const ChatInput = () => {
                 cursor='pointer'
                 variant='ghost'
                 as={BsImage}
-                color='blue.500'
+                color={`${theme}.500`}
               />
               <Text as='span' color='gray.500' fontWeight='light' fontSize='xs'>
                 {img && `${img.name.substring(0, 4)}...${img.name.slice(-3)}`}
@@ -203,7 +204,7 @@ const ChatInput = () => {
 
           <Button
             variant='ghost'
-            colorScheme='twitter'
+            colorScheme={theme || 'twitter'}
             onClick={() => handleSend()}
           >
             Send

@@ -5,9 +5,12 @@ import { useAuthContext } from './context/AuthContext';
 import ForgotPassword from './pages/ForgotPassword';
 import { useEffect, useState } from 'react';
 import PrivateRoute from './pages/PrivateRoute';
+import { useChatContext } from './context/ChatContext';
 
 function App() {
   const { currentUser, setCurrentUser } = useAuthContext();
+  const { data } = useChatContext();
+  const theme = data && data.theme;
 
   useEffect(() => {
     const storage = JSON.parse(window.localStorage.getItem('homechat'));
@@ -20,7 +23,8 @@ function App() {
     <Box
       minW='100vw'
       minH='100vh'
-      bgGradient='linear(to-r, blue.200, blue.300)'
+      // bgGradient='linear(to-r, blue.200, blue.300)'
+      bgGradient={`linear(to-r, ${theme}.200, ${theme}.300)`}
     >
       <BrowserRouter>
         <Routes>
