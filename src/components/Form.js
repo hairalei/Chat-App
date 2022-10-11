@@ -112,29 +112,44 @@ const Form = ({
             />
 
             {/* password */}
-            <FormLabel htmlFor='password'>Password</FormLabel>
-            <Box position='relative' mb='4'>
-              <Input
-                type={showPassword ? 'text' : 'password'}
-                id='password'
-                placeholder='******'
-                _placeholder={{ letterSpacing: ' 2px', fontSize: '20px' }}
-                onChange={handleChange}
-                minLength={6}
-              />
-              <IconButton
-                icon={showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
-                position='absolute'
-                cursor='pointer'
-                variant='unstyled'
-                right={0}
-                fontSize={24}
-                color='gray.500'
-                onClick={() => setShowPassword(!showPassword)}
-                zIndex='modal'
-                tabIndex={-1}
-              />
-            </Box>
+            {location !== 'Forgot Password' && (
+              <>
+                <FormLabel htmlFor='password'>Password</FormLabel>
+                <Box position='relative' mb='4'>
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    id='password'
+                    placeholder='******'
+                    _placeholder={{ letterSpacing: ' 2px', fontSize: '20px' }}
+                    onChange={handleChange}
+                    minLength={6}
+                  />
+                  <IconButton
+                    icon={showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
+                    position='absolute'
+                    cursor='pointer'
+                    variant='unstyled'
+                    right={0}
+                    fontSize={24}
+                    color='gray.500'
+                    onClick={() => setShowPassword(!showPassword)}
+                    zIndex='modal'
+                    tabIndex={-1}
+                  />
+                </Box>
+              </>
+            )}
+
+            {location === 'Login' && (
+              <Button
+                variant='link'
+                colorScheme='blue'
+                width='max-content'
+                mt={-2}
+              >
+                <Link to='/forgot-password'>Forgot Password</Link>
+              </Button>
+            )}
 
             {/* confirm password  */}
             {location === 'Register' && (
@@ -218,19 +233,31 @@ const Form = ({
           </Flex>
         </FormControl>
 
-        <Text as='p' textAlign='center' color='gray.600' mt='2'>
-          {location === 'Register'
-            ? 'Already have an account? '
-            : 'No account yet? '}
+        {location !== 'Forgot Password' ? (
+          <Text as='p' textAlign='center' color='gray.600' mt='2'>
+            {location === 'Register'
+              ? 'Already have an account? '
+              : 'No account yet? '}
 
-          <Button variant='link' colorScheme='blue'>
-            {location === 'Register' ? (
-              <Link to='/login'>Login</Link>
-            ) : (
-              <Link to='/register'>Register</Link>
-            )}
+            <Button variant='link' colorScheme='blue'>
+              {location === 'Register' ? (
+                <Link to='/login'>Login</Link>
+              ) : (
+                <Link to='/register'>Register</Link>
+              )}
+            </Button>
+          </Text>
+        ) : (
+          <Button
+            variant='link'
+            color='blue.400'
+            display='block'
+            margin='0 auto'
+            mt={1}
+          >
+            <Link to='/login'>Back to Login</Link>
           </Button>
-        </Text>
+        )}
       </Container>
     </>
   );

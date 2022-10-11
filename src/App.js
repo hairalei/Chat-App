@@ -2,6 +2,7 @@ import { Home, Register, Login } from './pages';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Box } from '@chakra-ui/react';
 import { useAuthContext } from './context/AuthContext';
+import ForgotPassword from './pages/ForgotPassword';
 
 function App() {
   const { currentUser } = useAuthContext();
@@ -33,6 +34,7 @@ function App() {
             />
             <Route path='login' element={<Login />} />
             <Route path='register' element={<Register />} />
+            <Route path='forgot-password' element={<ForgotPassword />} />
           </Route>
         </Routes>
       </BrowserRouter>

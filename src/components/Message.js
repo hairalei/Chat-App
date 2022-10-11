@@ -36,7 +36,7 @@ const Message = ({ message }) => {
           >
             <Avatar
               mt={-3}
-              name="user's friend"
+              name={owner ? currentUser.displayName : data.user.displayName}
               src={owner ? currentUser.photoURL : data.user.photoURL}
             />
             <Text
