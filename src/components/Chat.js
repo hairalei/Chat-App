@@ -59,6 +59,7 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
       direction='column'
       position='relative'
       height='100%'
+      maxHeight='100vh'
     >
       {/* ========== chat header ========== */}
       <Flex
