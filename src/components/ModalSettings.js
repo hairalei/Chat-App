@@ -27,9 +27,11 @@ import { db } from '../firebase.config';
 import { v4 as uuid } from 'uuid';
 
 const ModalSettings = ({ title, onClose }) => {
-  const [value, setValue] = useState(null);
-  const { currentUser } = useAuthContext();
   const { data } = useChatContext();
+  const [value, setValue] = useState(
+    title === 'emoji' ? data.emoji : data.theme
+  );
+  const { currentUser } = useAuthContext();
 
   const [newNickname, setNewNickname] = useState(data.nickname);
 
@@ -39,8 +41,8 @@ const ModalSettings = ({ title, onClose }) => {
 
   //this is for radio button choices of emojis and theme
   const { getRootProps, getRadioProps } = useRadioGroup({
-    name: 'emojis',
-    defaultValue: data.emoji,
+    name: title === 'emoji' ? 'emojis' : 'themes',
+    defaultValue: title === 'emoji' ? data.emoji : data.theme,
     onChange: setValue,
   });
 
@@ -49,6 +51,28 @@ const ModalSettings = ({ title, onClose }) => {
 
   const handleSave = async (newNickname) => {
     const user = data.user;
+
+    if (newNickname[currentUser.username].trim().length === 0) {
+      setNewNickname((prev) => {
+        return {
+          ...prev,
+          [currentUser.username]: currentUser.displayName,
+        };
+      });
+      onClose();
+      return;
+    }
+
+    if (newNickname[user.username].trim().length === 0) {
+      setNewNickname((prev) => {
+        return {
+          ...prev,
+          [user.username]: user.displayName,
+        };
+      });
+      onClose();
+      return;
+    }
 
     const combinedId =
       currentUser.uid > user.uid
@@ -107,6 +131,9 @@ const ModalSettings = ({ title, onClose }) => {
   };
 
   const handleChange = (e) => {
+    const { id, value } = e.target;
+    console.log(e.target.placeholder);
+
     setNewNickname((prev) => {
       return { ...prev, [e.target.id]: e.target.value };
     });
