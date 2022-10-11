@@ -134,7 +134,14 @@ const ChatInput = () => {
       alignItems='center'
       px={2}
     >
-      <FormControl display='flex'>
+      <FormControl
+        as='form'
+        display='flex'
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSend();
+        }}
+      >
         <Input
           variant='unstyled'
           px={2}
