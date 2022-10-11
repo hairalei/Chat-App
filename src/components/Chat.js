@@ -59,7 +59,7 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
       direction='column'
       position='relative'
       height='100%'
-      maxHeight='100%'
+      maxHeight='100vh'
     >
       {/* ========== chat header ========== */}
       <Flex
@@ -67,7 +67,7 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
         color='gray.200'
         backgroundColor={`${theme}.600`}
         h='20'
-        py='5'
+        py={5}
         px={4}
         alignItems='center'
         justifyContent='space-between'
@@ -139,7 +139,7 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
       </Flex>
 
       {/* ========== message box ==========  */}
-      <Box overflowY='auto' h='100%' mb={20}>
+      <Box overflowY='auto' mb={20}>
         {userFriends && data.chatId && <Messages />}
         {userFriends && data.chatId && <ChatInput />}
       </Box>
