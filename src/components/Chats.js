@@ -34,7 +34,7 @@ const Chats = ({ color, onOpen, isOnMobile }) => {
     };
 
     currentUser.uid && userFriends?.length > 0 && getChats();
-  }, [currentUser.uid, userFriends]);
+  }, [currentUser.uid, userFriends, currentUser.friends]);
 
   //automatically select the latest chat when page loads
   useEffect(() => {

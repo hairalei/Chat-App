@@ -49,7 +49,12 @@ export const AuthContextProvider = ({ children }) => {
     };
 
     currentUser.uid && getUser();
-  }, [currentUser.uid, currentUser.displayName, currentUser.photoURL]);
+  }, [
+    currentUser.uid,
+    currentUser.displayName,
+    currentUser.photoURL,
+    currentUser.friends,
+  ]);
 
   return (
     <AuthContext.Provider value={{ currentUser, resetAuth, setCurrentUser }}>
