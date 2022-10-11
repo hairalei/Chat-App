@@ -66,7 +66,7 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
         as='header'
         color='gray.200'
         backgroundColor={`${theme}.600`}
-        h='20'
+        h={[16, 20]}
         py={5}
         px={4}
         alignItems='center'
