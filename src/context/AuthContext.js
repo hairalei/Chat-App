@@ -12,7 +12,6 @@ export const AuthContextProvider = ({ children }) => {
 
   const resetAuth = () => setCurrentUser({});
 
-  // detects if user logs in and out
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       window.localStorage.setItem('homechat', JSON.stringify(user));
@@ -24,16 +23,13 @@ export const AuthContextProvider = ({ children }) => {
     return () => unsub();
   }, []);
 
-  // get user's data from local storage so user is still logged in when page reloads
-  // useEffect(() => {
-  //   const storage = JSON.parse(window.localStorage.getItem('homechat'));
-  //   setCurrentUser((prev) => {
-  //     return { ...prev, ...storage };
-  //   });
-  // }, []);
+  useEffect(() => {
+    const storage = JSON.parse(window.localStorage.getItem('homechat'));
+    setCurrentUser((prev) => {
+      return { ...prev, ...storage };
+    });
+  }, []);
 
-  // get realtime user's profile from database
-  // this is for when user updates their profile
   useEffect(() => {
     const getUser = () => {
       const unsub = onSnapshot(

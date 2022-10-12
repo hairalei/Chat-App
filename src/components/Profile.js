@@ -19,7 +19,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { IoCalendar, IoPeople } from 'react-icons/io5';
-import { useAuthContext } from '../context/AuthContext';
+import { useAuthContext, updateUserProfile } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
 import moment from 'moment';
 import { useUserStatusContext } from '../context/UserStatusContext';
@@ -27,15 +27,7 @@ import { FcAddImage } from 'react-icons/fc';
 import { deleteUser, getAuth, updateProfile } from 'firebase/auth';
 import { auth, db, storage } from '../firebase.config';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import {
-  arrayRemove,
-  deleteDoc,
-  deleteField,
-  doc,
-  updateDoc,
-} from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
-import AlertModal from './AlertModal';
+import { doc, setDoc, updateDoc } from 'firebase/firestore';
 
 const Profile = ({ onClose, owner }) => {
   const toast = useToast();
@@ -46,7 +38,6 @@ const Profile = ({ onClose, owner }) => {
   const { resetStatus } = useUserStatusContext();
   const { userFriends, temp: friendsArr } = useUserStatusContext();
   const { displayName, friends, photoURL, timestamp, username } = data.user;
-
   const date = owner ? currentUser.timestamp.seconds : timestamp.seconds;
   const numFriends = owner ? userFriends?.length : friends?.length;
 
