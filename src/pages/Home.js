@@ -16,13 +16,9 @@ import {
 import { Navbar, Sidebar, Chat } from '../components';
 
 const Home = () => {
-  const [isOnLaptopAndAbove] = useMediaQuery('(min-width: 62em)');
   const [isOnMobile] = useMediaQuery('(max-width: 40em)');
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const btnRef = React.useRef();
-
-  // console.log(onOpen);
 
   return (
     <Flex
@@ -49,11 +45,7 @@ const Home = () => {
         >
           <Sidebar onOpen={onOpen} isOnMobile={isOnMobile} />
           {!isOnMobile && <Chat />}
-          {/* <Chat /> */}
 
-          {/* <Button ref={btnRef} colorScheme='teal' onClick={onOpen}>
-            Open
-          </Button> */}
           <Drawer
             size='full'
             isOpen={isOpen}
@@ -68,7 +60,6 @@ const Home = () => {
                   isOnMobile={isOnMobile}
                   onClose={onClose}
                 />
-                {/* <DrawerCloseButton /> */}
               </DrawerBody>
             </DrawerContent>
           </Drawer>

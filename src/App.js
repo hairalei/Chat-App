@@ -1,10 +1,15 @@
-import { Home, Register, Login } from './pages';
+import {
+  Home,
+  Register,
+  Login,
+  ForgotPassword,
+  PrivateRoute,
+  ProtectedRoute,
+} from './pages';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Box } from '@chakra-ui/react';
 import { useAuthContext } from './context/AuthContext';
-import ForgotPassword from './pages/ForgotPassword';
 import { useEffect, useState } from 'react';
-import PrivateRoute from './pages/PrivateRoute';
 import { useChatContext } from './context/ChatContext';
 
 function App() {
@@ -23,7 +28,6 @@ function App() {
     <Box
       minW='100vw'
       minH='100vh'
-      // bgGradient='linear(to-r, blue.200, blue.300)'
       bgGradient={`linear(to-r, ${theme}.200, ${theme}.300)`}
     >
       <BrowserRouter>
@@ -37,9 +41,30 @@ function App() {
                 </PrivateRoute>
               }
             />
-            <Route path='login' element={<Login />} />
-            <Route path='register' element={<Register />} />
-            <Route path='forgot-password' element={<ForgotPassword />} />
+            <Route
+              path='login'
+              element={
+                <ProtectedRoute>
+                  <Login />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='register'
+              element={
+                <ProtectedRoute>
+                  <Register />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='forgot-password'
+              element={
+                <ProtectedRoute>
+                  <ForgotPassword />
+                </ProtectedRoute>
+              }
+            />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -68,13 +68,13 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
         backgroundColor={`${theme}.600`}
         h={[16, 20]}
         py={5}
-        px={4}
+        px={[1, 4]}
         alignItems='center'
         justifyContent='space-between'
       >
         {/* user name */}
         {userFriends && data.chatId && (
-          <Flex gap={2} alignItems='center'>
+          <Flex gap={[1, 2]} alignItems='center'>
             <IconButton
               onClick={isOnMobile ? onClose : handleFullscreen}
               variant='ghost'
@@ -91,7 +91,7 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
             />
             <Heading
               as='h1'
-              size={['md', 'lg']}
+              size={['sm', 'md', 'lg']}
               fontWeight={{ base: 'normal', md: 'medium' }}
             >
               {data?.nickname[data.user.username] || data.user?.displayName}
@@ -101,7 +101,7 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
 
         {/* icon group */}
         {userFriends && data.chatId && (
-          <Flex alignItems='center' gap={2}>
+          <Flex alignItems='center' gap={[1, 2]}>
             <ProfileButton />
             <Box>
               <Menu>
