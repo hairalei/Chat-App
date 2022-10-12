@@ -18,7 +18,7 @@ import {
   calc,
   Avatar,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   IoPerson,
   IoEllipsisHorizontalSharp,
@@ -36,6 +36,7 @@ import AvatarWithBadge from './AvatarWithBadge';
 import { useUserStatusContext } from '../context/UserStatusContext';
 import ProfileButton from './ProfileButton';
 import UnfriendButton from './UnfriendButton';
+import { useNavigate } from 'react-router-dom';
 
 const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
   const { data } = useChatContext();
@@ -44,12 +45,19 @@ const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
   const { theme } = data && data;
 
   const [fullscreen, setFullscreen] = useState(false);
-
-  // const { isOpen, onOpen, onClose } = useDisclosure();
+  const history = useNavigate();
 
   const handleFullscreen = () => {
     setFullscreen(!fullscreen);
   };
+
+  useEffect(() => {
+    const backEvent = (window.onpopstate = (e) => {
+      isOnMobile && onClose();
+    });
+
+    return () => backEvent();
+  }, []);
 
   return (
     <Flex
