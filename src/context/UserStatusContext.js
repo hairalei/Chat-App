@@ -56,6 +56,7 @@ export const UserStatusProvider = ({ children }) => {
     dispatch({ type: 'SET_USER_FRIENDS', payload: user });
   };
 
+  // fetch user's data from firestore
   useEffect(() => {
     async function fetchDocument() {
       if (currentUser && currentUser.uid) {
@@ -73,6 +74,7 @@ export const UserStatusProvider = ({ children }) => {
     fetchDocument();
   }, [currentUser, data?.user?.uid]);
 
+  // set friends in temp array after user's doc is fetched
   useEffect(() => {
     if (isDocrefExists && currentUser) {
       const unsub = onSnapshot(doc(db, 'users', currentUser.uid), (doc) => {
@@ -85,12 +87,14 @@ export const UserStatusProvider = ({ children }) => {
     }
   }, [isDocrefExists, currentUser]);
 
+  // sets user friends from temp array
   useEffect(() => {
     if (isDocrefExists && currentUser) {
       setUserFriends(temp);
     }
   }, [temp, currentUser]);
 
+  // detects realtime status of friends if they are online or not
   useEffect(() => {
     if (userFriends && userFriends.length > 0) {
       userFriends.forEach((friend) => {

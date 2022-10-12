@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@chakra-ui/react';
-import { Navbar, Search, Chats, Friends } from './';
+import { Navbar, Search, Chats } from './';
 import { useChatContext } from '../context/ChatContext';
 
 const Sidebar = ({ onOpen, isOnMobile }) => {

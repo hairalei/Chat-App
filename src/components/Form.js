@@ -7,7 +7,6 @@ import {
   Input,
   Flex,
   Button,
-  Center,
   Container,
   Heading,
   Text,
@@ -16,15 +15,12 @@ import {
   Box,
   IconButton,
   Image,
-  Divider,
 } from '@chakra-ui/react';
 import { FcAddImage } from 'react-icons/fc';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import logo from '../assets/LogoWithName.svg';
-import GoogleButton from './GoogleButton';
-import DemoButton from './DemoButton';
-import DividerCustom from './DividerCustom';
+import { GoogleButton, DemoButton, DividerCustom } from './';
 
 const Form = ({
   location,

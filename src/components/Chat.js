@@ -7,50 +7,33 @@ import {
   Menu,
   MenuButton,
   MenuList,
-  MenuItem,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  calc,
-  Avatar,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { IoEllipsisHorizontalSharp, IoArrowBackOutline } from 'react-icons/io5';
 import {
-  IoPerson,
-  IoEllipsisHorizontalSharp,
-  IoArrowBackOutline,
-} from 'react-icons/io5';
+  Messages,
+  ChatInput,
+  ModalButton,
+  AvatarWithBadge,
+  ProfileButton,
+  UnfriendButton,
+} from './';
 import { useChatContext } from '../context/ChatContext';
-import { Messages, ChatInput } from './';
-import ModalButton from './ModalButton';
-import { themes } from '../utils/utils';
-import { useAuthContext } from '../context/AuthContext';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase.config';
-import Profile from './Profile';
-import AvatarWithBadge from './AvatarWithBadge';
 import { useUserStatusContext } from '../context/UserStatusContext';
-import ProfileButton from './ProfileButton';
-import UnfriendButton from './UnfriendButton';
 import { useNavigate } from 'react-router-dom';
 
-const Chat = ({ ref, onOpen, isOnMobile, onClose }) => {
+const Chat = ({ isOnMobile, onClose }) => {
   const { data } = useChatContext();
-  const { currentUser } = useAuthContext();
   const { userFriends } = useUserStatusContext();
   const { theme } = data && data;
 
   const [fullscreen, setFullscreen] = useState(false);
-  const history = useNavigate();
 
   const handleFullscreen = () => {
     setFullscreen(!fullscreen);
   };
 
+  // to detect back event in mobile
   useEffect(() => {
     const backEvent = (window.onpopstate = (e) => {
       isOnMobile && onClose();

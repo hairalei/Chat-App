@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Container,
   Flex,
   Input,
   Avatar,
   Text,
-  FormErrorMessage,
-  FormControl,
   Spinner,
   Center,
   useToast,
@@ -22,9 +19,6 @@ import {
   updateDoc,
   serverTimestamp,
   arrayUnion,
-  orderBy,
-  startAt,
-  endAt,
 } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import { useAuthContext } from '../context/AuthContext';
@@ -49,7 +43,6 @@ const Search = () => {
   }, []);
 
   const handleSearch = async (e) => {
-    // if (e.code !== 'Enter' && e.code !== 'NumpadEnter') return;
     e.preventDefault();
 
     setHide(false);
@@ -218,7 +211,6 @@ const Search = () => {
             setHide(true);
             setError(null);
           }}
-          // onKeyDown={handleSearch}
           value={username}
         />
       </form>
@@ -230,7 +222,7 @@ const Search = () => {
 
       {/* User result  */}
       {results.map((result, idx) => {
-        const { displayName, email, photoURL, uid } = result;
+        const { displayName, photoURL } = result;
 
         return (
           <Flex

@@ -1,5 +1,5 @@
-import { Avatar, AvatarBadge, Stack } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import React from 'react';
+import { Avatar, AvatarBadge } from '@chakra-ui/react';
 import { useChatContext } from '../context/ChatContext';
 import { useUserStatusContext } from '../context/UserStatusContext';
 
@@ -8,7 +8,8 @@ const AvatarWithBadge = ({ src, email, friends, user, displayName }) => {
   const { dispatch } = useChatContext();
 
   return (
-    <Avatar name={displayName}
+    <Avatar
+      name={displayName}
       cursor='pointer'
       src={src}
       mr='2'

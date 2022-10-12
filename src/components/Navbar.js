@@ -36,7 +36,7 @@ const Navbar = ({ color, isOnMobile }) => {
   const [isLargerThan1400] = useMediaQuery('(min-width: 1400px)');
   const toast = useToast();
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen } = useDisclosure();
 
   const handleLogOut = () => {
     onOpen();
