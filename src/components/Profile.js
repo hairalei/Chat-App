@@ -19,25 +19,36 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { IoCalendar, IoPeople } from 'react-icons/io5';
-import { useAuthContext, updateUserProfile } from '../context/AuthContext';
+import { useAuthContext } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
 import moment from 'moment';
 import { useUserStatusContext } from '../context/UserStatusContext';
 import { FcAddImage } from 'react-icons/fc';
-import { updateProfile } from 'firebase/auth';
+import { deleteUser, getAuth, updateProfile } from 'firebase/auth';
 import { auth, db, storage } from '../firebase.config';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { doc, setDoc, updateDoc } from 'firebase/firestore';
+import {
+  arrayRemove,
+  deleteDoc,
+  deleteField,
+  doc,
+  updateDoc,
+} from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+import AlertModal from './AlertModal';
 
 const Profile = ({ onClose, owner }) => {
   const toast = useToast();
+  const navigate = useNavigate();
 
-  const { currentUser } = useAuthContext();
-  const { data } = useChatContext();
-  const { userFriends } = useUserStatusContext();
+  const { currentUser, resetAuth } = useAuthContext();
+  const { data, resetChat } = useChatContext();
+  const { resetStatus } = useUserStatusContext();
+  const { userFriends, temp: friendsArr } = useUserStatusContext();
   const { displayName, friends, photoURL, timestamp, username } = data.user;
+
   const date = owner ? currentUser.timestamp.seconds : timestamp.seconds;
-  const numFriends = owner ? userFriends.length : friends.length;
+  const numFriends = owner ? userFriends?.length : friends?.length;
 
   const [formValues, setFormValues] = useState({
     displayName: currentUser.displayName,
@@ -171,6 +182,74 @@ const Profile = ({ onClose, owner }) => {
     }
   };
 
+  const handleDeactivate = async () => {
+    try {
+      friendsArr.length > 0 &&
+        friendsArr.forEach(async (friend) => {
+          const user = friend;
+          const combinedId =
+            currentUser.uid > user.uid
+              ? currentUser.uid + user.uid
+              : user.uid + currentUser.uid;
+
+          await deleteDoc(doc(db, 'chats', combinedId));
+
+          //delete user chats
+          await updateDoc(doc(db, 'userChats', currentUser.uid), {
+            [combinedId]: deleteField(),
+          });
+
+          await updateDoc(doc(db, 'userChats', user.uid), {
+            [combinedId]: deleteField(),
+          });
+
+          // delete user from friends list
+          await updateDoc(doc(db, 'users', user.uid), {
+            friends: arrayRemove({
+              uid: currentUser.uid,
+              email: currentUser.email,
+              photoURL: currentUser.photoURL,
+              displayName: currentUser.displayName,
+            }),
+          });
+        });
+
+      await deleteDoc(doc(db, 'users', currentUser.uid));
+      await deleteDoc(doc(db, 'userStatus', currentUser.uid));
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: 'Cannot deactivate',
+        description: 'Something went wrong. Try again',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+
+    deleteUser(auth.currentUser)
+      .then(() => {
+        console.log('Successfully deleted user');
+      })
+      .catch((error) => {
+        console.log('Error deleting user:', error);
+      });
+
+    toast({
+      title: 'Deactivate Account Success',
+      description: 'Redirecting to login page',
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    });
+    resetStatus();
+    resetChat();
+    resetAuth();
+    window.localStorage.removeItem('homechat');
+    onClose();
+    navigate('/login');
+  };
+
   return (
     <>
       <ModalOverlay />
@@ -281,6 +360,8 @@ const Profile = ({ onClose, owner }) => {
               {numFriends > 0 ? numFriends : 0} Friend{numFriends > 1 && 's'}
             </Text>
           </Flex>
+
+          {isEditing && <AlertModal handleDeactivate={handleDeactivate} />}
         </ModalBody>
 
         <ModalFooter>

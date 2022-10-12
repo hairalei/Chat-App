@@ -52,6 +52,7 @@ const ModalSettings = ({ title, onClose }) => {
   const handleSave = async (newNickname) => {
     const user = data.user;
 
+    // if new nickname is empty, nickname becomes displayname
     if (newNickname[currentUser.username].trim().length === 0) {
       setNewNickname((prev) => {
         return {
@@ -131,9 +132,6 @@ const ModalSettings = ({ title, onClose }) => {
   };
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
-    console.log(e.target.placeholder);
-
     setNewNickname((prev) => {
       return { ...prev, [e.target.id]: e.target.value };
     });

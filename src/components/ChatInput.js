@@ -148,11 +148,6 @@ const ChatInput = () => {
           type='text'
           placeholder='Type a message here...'
           onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.code === 'Enter' || e.code === 'NumpadEnter') {
-              handleSend();
-            }
-          }}
           value={text}
         />
 

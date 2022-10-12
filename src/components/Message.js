@@ -1,6 +1,6 @@
+import React from 'react';
 import { Avatar, Box, Flex, Image, Text } from '@chakra-ui/react';
 import moment from 'moment';
-import React, { useEffect } from 'react';
 import { useAuthContext } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
 
@@ -18,7 +18,6 @@ const Message = ({ message }) => {
           as='p'
           fontSize='xs'
           maxWidth='max-content'
-          // mt={4}
           color='gray.500'
           fontStyle='italic'
           mx='auto'
@@ -55,7 +54,6 @@ const Message = ({ message }) => {
             direction='column'
             maxWidth='60%'
             alignItems={owner && 'flex-end'}
-            // justifyContent={message.info && 'end'}
           >
             {message.text && (
               <Text

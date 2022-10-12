@@ -6,14 +6,14 @@ import {
   PrivateRoute,
   ProtectedRoute,
 } from './pages';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Box } from '@chakra-ui/react';
 import { useAuthContext } from './context/AuthContext';
 import { useEffect, useState } from 'react';
 import { useChatContext } from './context/ChatContext';
 
 function App() {
-  const { currentUser, setCurrentUser } = useAuthContext();
+  const { setCurrentUser } = useAuthContext();
   const { data } = useChatContext();
   const theme = data && data.theme;
 

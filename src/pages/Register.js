@@ -7,14 +7,13 @@ import {
   doc,
   serverTimestamp,
   query,
-  getDoc,
   getDocs,
   where,
   collection,
 } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { auth, db, storage } from '../firebase.config';
-import { Box, Center, Flex } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 
 const initialFormValues = {
   displayName: '',
@@ -47,6 +46,7 @@ const Register = () => {
     }
   };
 
+  // checks realtime if username is taken or not
   useEffect(() => {
     const getUsername = async () => {
       setIsLoading(true);
@@ -120,8 +120,6 @@ const Register = () => {
       // Create a reference
       const storageRef = ref(storage, `${email}.jpg`);
 
-      // Create a reference
-      const storageImagesRef = ref(storage, `images/${email}.jpg`);
       const uploadTask = uploadBytesResumable(storageRef, file, metadata);
 
       uploadTask.on(

@@ -1,9 +1,6 @@
 import React from 'react';
 import {
   Box,
-  Button,
-  Center,
-  Container,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -13,7 +10,7 @@ import {
   useDisclosure,
   useMediaQuery,
 } from '@chakra-ui/react';
-import { Navbar, Sidebar, Chat } from '../components';
+import { Sidebar, Chat } from '../components';
 
 const Home = () => {
   const [isOnMobile] = useMediaQuery('(max-width: 40em)');
@@ -25,7 +22,6 @@ const Home = () => {
       as='main'
       alignItems='center'
       justifyContent='center'
-      // overflow='hidden'
       h='100vh'
       w='100vw'
     >
