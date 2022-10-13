@@ -62,7 +62,7 @@ const GoogleButton = () => {
       console.log(error);
       toast({
         title: 'Google Sign In Error',
-        description: 'Email sent!',
+        description: 'Something went wrong. Please try again',
         status: 'error',
         duration: 3000,
         isClosable: true,

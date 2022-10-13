@@ -18,7 +18,10 @@ const Chats = ({ color, onOpen, isOnMobile }) => {
       const unsub = onSnapshot(
         doc(db, 'userChats', currentUser.uid),
         (doc) => {
+          if (!doc.data()) return;
+
           const res = doc.data();
+
           const data = Object.entries(res).sort(
             (a, b) => b[1].date - a[1].date
           );

@@ -9,12 +9,18 @@ export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(
     JSON.parse(window.localStorage.getItem('homechat')) || {}
   );
+  const [id, setID] = useState(null);
 
-  const resetAuth = () => setCurrentUser({});
+  const resetAuth = () => {
+    setCurrentUser({});
+    console.log('reset');
+  };
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
+      console.log(user);
       window.localStorage.setItem('homechat', JSON.stringify(user));
+      setID(user?.uid);
       setCurrentUser((prev) => {
         return { ...prev, ...user };
       });
@@ -23,36 +29,34 @@ export const AuthContextProvider = ({ children }) => {
     return () => unsub();
   }, []);
 
-  useEffect(() => {
-    const storage = JSON.parse(window.localStorage.getItem('homechat'));
-    setCurrentUser((prev) => {
-      return { ...prev, ...storage };
-    });
-  }, []);
+  // useEffect(() => {
+  //   const storage = JSON.parse(window.localStorage.getItem('homechat'));
+  //   setCurrentUser((prev) => {
+  //     return { ...prev, ...storage };
+  //   });
+  // }, []);
 
   useEffect(() => {
-    const getUser = () => {
-      const unsub = onSnapshot(
-        doc(db, 'users', currentUser.uid),
-        (doc) => {
-          const res = doc.data();
-          setCurrentUser((prev) => {
-            return { ...prev, ...res };
-          });
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    const unsub = onSnapshot(
+      doc(db, 'users', id || 'user'),
+      (doc) => {
+        const res = doc.data();
+        setCurrentUser((prev) => {
+          return { ...prev, ...res };
+        });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
 
-      return () => unsub();
-    };
-
-    currentUser.uid && getUser();
-  }, [currentUser.uid, currentUser.displayName, currentUser.photoURL]);
+    return () => unsub();
+  }, [id]);
 
   return (
-    <AuthContext.Provider value={{ currentUser, resetAuth, setCurrentUser }}>
+    <AuthContext.Provider
+      value={{ currentUser, resetAuth, setCurrentUser, setID }}
+    >
       {children}
     </AuthContext.Provider>
   );

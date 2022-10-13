@@ -29,7 +29,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { useUserStatusContext } from '../context/UserStatusContext';
 
 const Navbar = ({ color, isOnMobile }) => {
-  const { currentUser, resetAuth } = useAuthContext();
+  const { currentUser, resetAuth, setID } = useAuthContext();
   const { displayName, photoURL, email, uid } = currentUser;
   const { resetChat } = useChatContext();
   const { resetStatus } = useUserStatusContext();
@@ -48,6 +48,7 @@ const Navbar = ({ color, isOnMobile }) => {
     resetStatus();
     resetChat();
     resetAuth();
+    setID(null);
     window.localStorage.removeItem('homechat');
 
     toast({

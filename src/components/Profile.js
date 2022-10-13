@@ -27,7 +27,15 @@ import { FcAddImage } from 'react-icons/fc';
 import { deleteUser, getAuth, updateProfile } from 'firebase/auth';
 import { auth, db, storage } from '../firebase.config';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { doc, setDoc, updateDoc } from 'firebase/firestore';
+import AlertModal from './AlertModal';
+import {
+  arrayRemove,
+  deleteDoc,
+  deleteField,
+  doc,
+  updateDoc,
+} from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = ({ onClose, owner }) => {
   const toast = useToast();
@@ -36,10 +44,10 @@ const Profile = ({ onClose, owner }) => {
   const { currentUser, resetAuth } = useAuthContext();
   const { data, resetChat } = useChatContext();
   const { resetStatus } = useUserStatusContext();
-  const { userFriends, temp: friendsArr } = useUserStatusContext();
+  const { temp: friendsArr } = useUserStatusContext();
   const { displayName, friends, photoURL, timestamp, username } = data.user;
-  const date = owner ? currentUser.timestamp.seconds : timestamp.seconds;
-  const numFriends = owner ? userFriends?.length : friends?.length;
+  const date = owner ? currentUser?.timestamp?.seconds : timestamp?.seconds;
+  const numFriends = owner ? currentUser?.friends?.length : friends?.length;
 
   const [formValues, setFormValues] = useState({
     displayName: currentUser.displayName,
@@ -88,6 +96,7 @@ const Profile = ({ onClose, owner }) => {
 
         await updateDoc(doc(db, 'users', currentUser.uid), {
           displayName: newName,
+          searchName: newName,
         });
 
         toast({
@@ -97,6 +106,7 @@ const Profile = ({ onClose, owner }) => {
           isClosable: true,
         });
 
+        onClose();
         return;
       }
 
@@ -207,6 +217,7 @@ const Profile = ({ onClose, owner }) => {
 
       await deleteDoc(doc(db, 'users', currentUser.uid));
       await deleteDoc(doc(db, 'userStatus', currentUser.uid));
+      await deleteDoc(doc(db, 'userChats', currentUser.uid));
     } catch (error) {
       console.log(error);
       toast({
