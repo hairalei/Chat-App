@@ -24,10 +24,20 @@ import { useChatContext } from '../context/ChatContext';
 import moment from 'moment';
 import { useUserStatusContext } from '../context/UserStatusContext';
 import { FcAddImage } from 'react-icons/fc';
-import { deleteUser, getAuth, updateProfile } from 'firebase/auth';
+import {
+  AuthCredential,
+  deleteUser,
+  EmailAuthCredential,
+  EmailAuthProvider,
+  getAuth,
+  reauthenticateWithCredential,
+  signInWithEmailAndPassword,
+  updatePassword,
+  updateProfile,
+} from 'firebase/auth';
 import { auth, db, storage } from '../firebase.config';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import AlertModal from './AlertModal';
+import DeactivateButton from './DeactivateButton';
 import {
   arrayRemove,
   deleteDoc,
@@ -36,6 +46,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import ChangePasswordButton from './ChangePasswordButton';
 
 const Profile = ({ onClose, owner }) => {
   const toast = useToast();
@@ -184,6 +195,23 @@ const Profile = ({ onClose, owner }) => {
   };
 
   const handleDeactivate = async () => {
+    if (
+      currentUser.email === process.env.REACT_APP_DEMOUSER_1 ||
+      currentUser.email === process.env.REACT_APP_DEMOUSER_2
+    ) {
+      toast({
+        title: 'Deactivate Account',
+        description: 'You cannot deactivate my demo user!!!',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+
+      return;
+    }
+
+    setIsLoading(true);
+
     try {
       friendsArr.length > 0 &&
         friendsArr.forEach(async (friend) => {
@@ -221,7 +249,7 @@ const Profile = ({ onClose, owner }) => {
     } catch (error) {
       console.log(error);
       toast({
-        title: 'Cannot deactivate',
+        title: 'Deactivate Account',
         description: 'Something went wrong. Try again',
         status: 'error',
         duration: 3000,
@@ -237,6 +265,7 @@ const Profile = ({ onClose, owner }) => {
         console.log('Error deleting user:', error);
       });
 
+    setIsLoading(false);
     toast({
       title: 'Deactivate Account Success',
       description: 'Redirecting to login page',
@@ -250,6 +279,58 @@ const Profile = ({ onClose, owner }) => {
     window.localStorage.removeItem('homechat');
     onClose();
     navigate('/login');
+  };
+
+  const handleUpdate = (newPassword) => {
+    if (
+      currentUser.email === process.env.REACT_APP_DEMOUSER_1 ||
+      currentUser.email === process.env.REACT_APP_DEMOUSER_2
+    ) {
+      toast({
+        title: 'Change Password',
+        description: 'You cannot change the password of my demo user!!!',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+
+      return;
+    }
+
+    setIsLoading(true);
+    // const auth = getAuth();
+    const user = auth.currentUser;
+
+    updatePassword(user, newPassword)
+      .then(() => {
+        // Update successful.
+        setIsLoading(false);
+
+        toast({
+          title: 'Change Password',
+          description: 'Success',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+
+        onClose();
+        return;
+      })
+      .catch((error) => {
+        // An error ocurred
+        setIsLoading(false);
+        console.log(error);
+        toast({
+          title: 'Change Password Error',
+          description:
+            'Plese log in again and change password within 5 minutes',
+          status: 'error',
+          duration: 7000,
+          isClosable: true,
+        });
+        // ...
+      });
   };
 
   return (
@@ -363,7 +444,18 @@ const Profile = ({ onClose, owner }) => {
             </Text>
           </Flex>
 
-          {isEditing && <AlertModal handleDeactivate={handleDeactivate} />}
+          {isEditing && (
+            <>
+              <ChangePasswordButton
+                handleUpdate={handleUpdate}
+                isLoading={isLoading}
+              />
+              <DeactivateButton
+                isLoading={isLoading}
+                handleDeactivate={handleDeactivate}
+              />
+            </>
+          )}
         </ModalBody>
 
         <ModalFooter>
@@ -373,7 +465,7 @@ const Profile = ({ onClose, owner }) => {
                 variant='ghost'
                 colorScheme='red'
                 mr={3}
-                onClick={onClose}
+                onClick={isEditing ? () => setIsEditing(!isEditing) : onClose}
               >
                 {isEditing ? 'Cancel' : 'Close'}
               </Button>

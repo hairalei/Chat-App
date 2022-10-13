@@ -7,12 +7,13 @@ import {
   AlertDialogOverlay,
   Button,
   Icon,
+  Spinner,
   useDisclosure,
 } from '@chakra-ui/react';
 import React from 'react';
 import { IoWarning } from 'react-icons/io5';
 
-const AlertModal = ({ handleDeactivate }) => {
+const DeactivateButton = ({ handleDeactivate, isLoading }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -23,12 +24,17 @@ const AlertModal = ({ handleDeactivate }) => {
         opacity={0.7}
         _hover={{ opacity: 1 }}
         onClick={onOpen}
-        mt={4}
+        display='block'
       >
         Deactivate Account
       </Button>
 
-      <AlertDialog isCentered={true} isOpen={isOpen} onClose={onClose}>
+      <AlertDialog
+        isCentered={true}
+        isOpen={isOpen}
+        onClose={onClose}
+        blockScrollOnMount={false}
+      >
         <AlertDialogOverlay>
           <AlertDialogContent backgroundColor='red.100'>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
@@ -50,8 +56,13 @@ const AlertModal = ({ handleDeactivate }) => {
               <Button variant='ghost' onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme='red' onClick={handleDeactivate} ml={3}>
-                Deactivate
+              <Button
+                isDisabled={isLoading}
+                colorScheme='red'
+                onClick={handleDeactivate}
+                ml={3}
+              >
+                {isLoading ? <Spinner /> : 'Deactivate'}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -61,4 +72,4 @@ const AlertModal = ({ handleDeactivate }) => {
   );
 };
 
-export default AlertModal;
+export default DeactivateButton;

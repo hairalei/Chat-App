@@ -2,6 +2,8 @@
 
 This Chat App allows you to communicate in real time. I used React and Firebase to store data and authentication. I used Chakra UI for the styles.
 
+https://homechat-app.vercel.app/
+
 ## Features
 
 - Real time data
