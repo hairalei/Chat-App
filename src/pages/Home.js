@@ -3,7 +3,6 @@ import {
   Box,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerOverlay,
   Flex,
@@ -51,11 +50,7 @@ const Home = () => {
             <DrawerOverlay />
             <DrawerContent>
               <DrawerBody>
-                <Chat
-                  onOpen={onOpen}
-                  isOnMobile={isOnMobile}
-                  onClose={onClose}
-                />
+                <Chat isOnMobile={isOnMobile} onClose={onClose} />
               </DrawerBody>
             </DrawerContent>
           </Drawer>
