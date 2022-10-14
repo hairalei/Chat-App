@@ -19,7 +19,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { IoCalendar, IoPeople } from 'react-icons/io5';
-import { useAuthContext, updateUserProfile } from '../context/AuthContext';
+import { useAuthContext } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
 import moment from 'moment';
 import { useUserStatusContext } from '../context/UserStatusContext';

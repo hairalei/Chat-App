@@ -223,7 +223,7 @@ const Form = ({
               type='submit'
               colorScheme='blue'
               variant='solid'
-              mt='6'
+              mt={location === 'Login' ? 6 : 4}
               onSubmit={handleSubmit}
               textTransform='uppercase'
               letterSpacing='2px'
