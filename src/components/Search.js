@@ -52,11 +52,11 @@ const Search = () => {
 
     const q = query(
       collection(db, 'users'),
-      where('searchName', '==', username.toLowerCase())
+      where('searchName', '==', username.toLowerCase().trim())
     );
     const q2 = query(
       collection(db, 'users'),
-      where('username', '==', username)
+      where('username', '==', username.trim())
     );
 
     try {
