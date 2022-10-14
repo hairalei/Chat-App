@@ -11,6 +11,7 @@ import {
   Flex,
   Input,
   FormLabel,
+  FormControl,
 } from '@chakra-ui/react';
 import { emojis, themes } from '../utils/utils';
 import RadioCard from './RadioCard';
@@ -60,8 +61,6 @@ const ModalSettings = ({ title, onClose }) => {
           [currentUser.username]: currentUser.displayName,
         };
       });
-      onClose();
-      return;
     }
 
     if (newNickname[user.username].trim().length === 0) {
@@ -71,8 +70,6 @@ const ModalSettings = ({ title, onClose }) => {
           [user.username]: user.displayName,
         };
       });
-      onClose();
-      return;
     }
 
     const combinedId =
