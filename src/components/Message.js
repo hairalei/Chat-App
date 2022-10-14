@@ -1,5 +1,17 @@
 import React from 'react';
-import { Avatar, Box, Flex, Image, Text } from '@chakra-ui/react';
+import {
+  Avatar,
+  Box,
+  Flex,
+  Image,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import moment from 'moment';
 import { useAuthContext } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
@@ -8,6 +20,8 @@ const Message = ({ message }) => {
   const { currentUser } = useAuthContext();
   const { data } = useChatContext();
   const { theme } = data;
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const owner = message.senderId === currentUser.uid;
 
@@ -71,6 +85,8 @@ const Message = ({ message }) => {
 
             {message.img && (
               <Image
+                onClick={onOpen}
+                cursor='pointer'
                 src={message.img}
                 alt='image'
                 boxSize='90%'
@@ -81,6 +97,23 @@ const Message = ({ message }) => {
           </Flex>
         </Flex>
       )}
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody backgroundColor='blackAlpha.500'>
+            {message.img && (
+              <Image
+                src={message.img}
+                alt='image'
+                boxSize='100%'
+                objectFit='cover'
+              />
+            )}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };
