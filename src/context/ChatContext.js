@@ -11,15 +11,16 @@ import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 
 const ChatContext = createContext();
 
+const INITIAL_STATE = {
+  chatId: null,
+  user: {},
+  emoji: 'like',
+  theme: 'blue',
+  nickname: {},
+};
+
 export const ChatContextProvider = ({ children }) => {
   const { currentUser } = useAuthContext();
-  const INITIAL_STATE = {
-    chatId: null,
-    user: {},
-    emoji: 'like',
-    theme: 'blue',
-    nickname: {},
-  };
 
   const resetChat = () => {
     dispatch({
@@ -72,11 +73,12 @@ export const ChatContextProvider = ({ children }) => {
         };
     }
 
-    return state;
+    throw new Error(`No Matching "${action.type}" - action type`);
   };
 
   const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE);
 
+  // get user chat's emoji, nickname, and theme
   useEffect(() => {
     if (state.user.uid && currentUser.uid) {
       const combinedId =

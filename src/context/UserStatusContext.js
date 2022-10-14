@@ -35,6 +35,8 @@ const reducer = (state, action) => {
     case 'RESET_STATUS':
       return { ...INITIAL_STATE };
   }
+
+  throw new Error(`No Matching "${action.type}" - action type`);
 };
 
 export const UserStatusProvider = ({ children }) => {

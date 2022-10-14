@@ -16,9 +16,9 @@ export const AuthContextProvider = ({ children }) => {
     console.log('reset');
   };
 
+  //detects if user logs in and out
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
-      console.log(user);
       window.localStorage.setItem('homechat', JSON.stringify(user));
       setID(user?.uid);
       setCurrentUser((prev) => {
@@ -29,13 +29,7 @@ export const AuthContextProvider = ({ children }) => {
     return () => unsub();
   }, []);
 
-  // useEffect(() => {
-  //   const storage = JSON.parse(window.localStorage.getItem('homechat'));
-  //   setCurrentUser((prev) => {
-  //     return { ...prev, ...storage };
-  //   });
-  // }, []);
-
+  // get realtime data of user's profile
   useEffect(() => {
     const unsub = onSnapshot(
       doc(db, 'users', id || 'user'),
