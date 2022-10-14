@@ -24,17 +24,7 @@ import { useChatContext } from '../context/ChatContext';
 import moment from 'moment';
 import { useUserStatusContext } from '../context/UserStatusContext';
 import { FcAddImage } from 'react-icons/fc';
-import {
-  AuthCredential,
-  deleteUser,
-  EmailAuthCredential,
-  EmailAuthProvider,
-  getAuth,
-  reauthenticateWithCredential,
-  signInWithEmailAndPassword,
-  updatePassword,
-  updateProfile,
-} from 'firebase/auth';
+import { deleteUser, updatePassword, updateProfile } from 'firebase/auth';
 import { auth, db, storage } from '../firebase.config';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import DeactivateButton from './DeactivateButton';
@@ -392,7 +382,10 @@ const Profile = ({ onClose, owner }) => {
             mb={6}
             textAlign='center'
           >
-            {owner ? currentUser.displayName : displayName}'s profile
+            {owner
+              ? currentUser.displayName.split(' ')[0]
+              : displayName.split(' ')[0]}
+            's profile
           </Heading>
 
           <Heading as='h6' fontSize='lg' mb={2}>
