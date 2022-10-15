@@ -1,4 +1,5 @@
 import {
+  Error,
   Home,
   Register,
   Login,
@@ -65,6 +66,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path='*' element={<Error />} />
           </Route>
         </Routes>
       </BrowserRouter>
