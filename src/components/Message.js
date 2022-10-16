@@ -56,8 +56,10 @@ const Message = ({ message }) => {
               as='span'
               display='block'
               color='gray.500'
-              fontSize='xs'
+              fontSize='2xs'
               textAlign={owner ? 'right' : 'left'}
+              lineHeight={1.2}
+              mt={1}
             >
               {moment(new Date(message.date.seconds * 1000)).calendar()}
             </Text>
