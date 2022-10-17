@@ -29,6 +29,7 @@ import { emojis } from '../utils/utils';
 const ChatInput = () => {
   const [text, setText] = useState('');
   const [img, setImg] = useState(null);
+  const [video, setVideo] = useState(null);
 
   const { currentUser } = useAuthContext();
   const { data } = useChatContext();
@@ -38,7 +39,7 @@ const ChatInput = () => {
 
   const handleSend = async (emoji) => {
     if (img) {
-      const storageRef = ref(storage, uuid());
+      const storageRef = ref(storage, img.name);
       const uploadTask = uploadBytesResumable(storageRef, img);
 
       uploadTask.on(
@@ -76,7 +77,8 @@ const ChatInput = () => {
                 id: uuid(),
                 senderId: currentUser.uid,
                 date: Timestamp.now(),
-                img: downloadURL,
+                [`${img.type.indexOf('image') !== -1 ? 'img' : 'video'}`]:
+                  downloadURL,
               }),
             });
           });
@@ -85,14 +87,16 @@ const ChatInput = () => {
     }
 
     if (text) {
-      await updateDoc(doc(db, 'chats', data.chatId), {
-        messages: arrayUnion({
-          id: uuid(),
-          text,
-          senderId: currentUser.uid,
-          date: Timestamp.now(),
-        }),
-      });
+      if (text.trim().length !== 0) {
+        await updateDoc(doc(db, 'chats', data.chatId), {
+          messages: arrayUnion({
+            id: uuid(),
+            text,
+            senderId: currentUser.uid,
+            date: Timestamp.now(),
+          }),
+        });
+      }
     }
 
     if (emoji) {
@@ -201,7 +205,20 @@ const ChatInput = () => {
             id='file'
             type='file'
             sx={{ display: 'none' }}
-            onChange={(e) => setImg(e.target.files[0])}
+            onChange={(e) => {
+              if (e.target.files[0].size > 2000000) {
+                toast({
+                  title: 'Upload error',
+                  description: 'File should be less than 2Mb',
+                  status: 'error',
+                  duration: 3000,
+                  isClosable: true,
+                });
+
+                return;
+              }
+              setImg(e.target.files[0]);
+            }}
           />
 
           <Button
