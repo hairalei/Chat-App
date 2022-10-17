@@ -79,6 +79,7 @@ const ChatInput = () => {
                 date: Timestamp.now(),
                 [`${img.type.indexOf('image') !== -1 ? 'img' : 'video'}`]:
                   downloadURL,
+                filename: img.name,
               }),
             });
           });
@@ -214,9 +215,23 @@ const ChatInput = () => {
                   duration: 3000,
                   isClosable: true,
                 });
-
                 return;
               }
+
+              if (
+                e.target.files[0].type.indexOf('video') === -1 &&
+                e.target.files[0].type.indexOf('image')
+              ) {
+                toast({
+                  title: 'Upload error',
+                  description: 'Images and videos only',
+                  status: 'error',
+                  duration: 3000,
+                  isClosable: true,
+                });
+                return;
+              }
+
               setImg(e.target.files[0]);
             }}
           />
