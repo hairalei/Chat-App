@@ -45,6 +45,8 @@ const Message = ({ message }) => {
     if (action === 'longpress') {
       onOpen();
     }
+
+    console.log(action);
   }, [action]);
 
   const handleCopy = () => {
