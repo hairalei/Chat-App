@@ -12,10 +12,11 @@ export default function useLongPress() {
       isLongPress.current = true;
       setAction('longpress');
     }, 500);
+    setAction('end');
   }
 
   function handleOnClick(e) {
-    console.log('handleOnClick');
+    // console.log('handleOnClick');
     if (isLongPress.current) {
       // console.log('Is long press - not continuing.');
       setAction('longpress');
@@ -26,24 +27,24 @@ export default function useLongPress() {
   }
 
   function handleOnMouseDown() {
-    console.log('handleOnMouseDown');
+    // console.log('handleOnMouseDown');
     startPressTimer();
   }
 
   function handleOnMouseUp() {
-    console.log('handleOnMouseUp');
+    // console.log('handleOnMouseUp');
     clearTimeout(timerRef.current);
     setAction('end');
   }
 
   function handleOnTouchStart() {
-    console.log('handleOnTouchStart');
+    // console.log('handleOnTouchStart');
     startPressTimer();
   }
 
   function handleOnTouchEnd() {
     if (action === 'longpress') return;
-    console.log('handleOnTouchEnd');
+    // console.log('handleOnTouchEnd');
     clearTimeout(timerRef.current);
     setAction('end');
   }

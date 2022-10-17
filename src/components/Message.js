@@ -46,7 +46,7 @@ const Message = ({ message }) => {
       onOpen();
     }
 
-    console.log(action);
+    // console.log(action);
   }, [action]);
 
   const handleCopy = () => {
