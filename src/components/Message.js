@@ -158,13 +158,7 @@ const Message = ({ message }) => {
   };
 
   return (
-    <Box
-      color='gray.900'
-      mb={3}
-      {...handlers}
-      cursor='pointer'
-      onDoubleClick={() => console.log('dbl')}
-    >
+    <Box color='gray.900' mb={3} userSelect='none'>
       {message.info && (
         <Text
           as='p'
@@ -208,6 +202,8 @@ const Message = ({ message }) => {
             direction='column'
             maxWidth='60%'
             alignItems={owner && 'flex-end'}
+            {...handlers}
+            cursor='pointer'
           >
             {message.text && (
               <Text
@@ -252,7 +248,7 @@ const Message = ({ message }) => {
       <MessageModal
         open={isImgOpen}
         close={onImgClose}
-        size={['md', 'lg', '2xl', '3xl']}
+        size={['md', 'lg', 'xl']}
         message={message}
         color='blackAlpha.500'
         preview
