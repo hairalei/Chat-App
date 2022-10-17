@@ -233,13 +233,13 @@ const Message = ({ message }) => {
             )}
 
             {message.video && (
-              <>
+              <div {...handlers}>
                 <video width='320' height='240' controls>
                   <source src={message.video} type='video/mp4' />
                   <source src={message.video + '.webm'} type='video/webm' />
                   Your browser does not support the video tag.
                 </video>
-              </>
+              </div>
             )}
           </Flex>
         </Flex>
