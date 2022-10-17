@@ -230,6 +230,7 @@ const Message = ({ message }) => {
                 boxSize='90%'
                 objectFit='cover'
                 mt={2}
+                fallbackSrc='https://via.placeholder.com/150'
               />
             )}
 

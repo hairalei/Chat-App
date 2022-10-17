@@ -32,6 +32,7 @@ const MessageModal = ({
                 alt='image'
                 boxSize='100%'
                 objectFit='cover'
+                fallbackSrc='https://via.placeholder.com/150'
               />
             )}
 
