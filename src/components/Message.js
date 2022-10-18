@@ -248,7 +248,7 @@ const Message = ({ message }) => {
       <MessageModal
         open={isImgOpen}
         close={onImgClose}
-        size={['md', 'lg', 'xl']}
+        size={['md', 'lg']}
         message={message}
         color='blackAlpha.500'
         preview
