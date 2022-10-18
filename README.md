@@ -4,6 +4,16 @@ This Chat App allows you to communicate in real time. I used React and Firebase 
 
 https://homechat-app.vercel.app/
 
+> **If you are using mobile/tablet device, add the app to home screen first**
+
+1. Click the link
+2. Open in mobile browser
+3. Click the _menu_ on the top right side (depends on your browser)
+4. Click "Add to home screen"
+5. Wait until it's finished
+6. Open the app and enjoy 😉
+   ![homechat](/public/readme/homechat.jpg)
+
 ## Features
 
 - Real time data
